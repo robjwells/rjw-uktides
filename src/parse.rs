@@ -175,14 +175,14 @@ pub struct TidalEvent {
 }
 
 /// Tide height in metres as an `f64`, wrapped in a newtype to make the measurement unit clear.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Copy, Deserialize)]
 pub struct Metres(pub f64);
 
 
 /// Represents either low or high tide.
 ///
 /// The Admiralty API response encodes low tide as 1 and high tide as 0.
-#[derive(Debug, Deserialize_repr)]
+#[derive(Debug, Copy, Clone, Deserialize_repr)]
 #[repr(u8)]
 pub enum TidalEventType {
     HighWater = 0,
@@ -190,7 +190,7 @@ pub enum TidalEventType {
 }
 
 /// Prediction of the tide height in metres at a particular time.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TidalHeightOccurence {
     /// Time of prediction, typically every half-hour.
@@ -200,7 +200,7 @@ pub struct TidalHeightOccurence {
 }
 
 /// Prediction of a particular lunar phase.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct LunarPhase {
     /// Datetime of the lunar phase occurrence.
@@ -224,7 +224,7 @@ pub struct LunarPhase {
 /// 2. First quarter moon.
 /// 3. Full moon.
 /// 4. Last quarter moon.
-#[derive(Debug, Deserialize_repr)]
+#[derive(Debug, Copy, Clone, Deserialize_repr)]
 #[repr(u8)]
 pub enum LunarPhaseType {
     NewMoon = 1,
@@ -252,7 +252,7 @@ struct StationsData {
 }
 
 /// Details of a specific tidal measurement station.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Station {
     /// ID used to identify the station when requesting tidal predictions.
     ///
@@ -279,11 +279,31 @@ pub struct Station {
     /// Whether the station can provide continuous height measurements.
     pub continuous_heights_available: bool,
 }
-///
+
+impl PartialEq for Station {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
+
+impl Eq for Station {}
+
+impl Ord for Station {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.id.as_str().cmp(&other.id)
+    }
+}
+
+impl PartialOrd for Station {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 /// Geographic coordinates (latitude and longitude) of the station.
 ///
 /// It is not clear which coordinate system these are from; perhaps WGS 84.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Copy, Clone)]
 pub struct Coordinates {
     // Order is important here as this struct is represented by an array in the JSON.
     /// Longitude, in decimal degrees.

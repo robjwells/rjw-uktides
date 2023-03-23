@@ -2,17 +2,27 @@ use std::error::Error;
 use std::fs::File;
 use std::io::BufReader;
 
+use fuzzy_finder::{item::Item, FuzzyFinder};
+
 use tidescli::{Station, TidePredictions};
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let tides = read_tides_reference_file()?;
-    println!("{:#?}", tides);
+    let _tides = read_tides_reference_file()?;
+    // println!("{:#?}", tides);
 
-    let stations = read_stations_reference_file()?;
-    println!("{:#?}", stations);
+    let mut stations = read_stations_reference_file()?;
+    stations.sort_unstable();
+    // println!("{:#?}", stations);
 
-    for s in stations {
-        println!("{}\t{}", s.id, s.name);
+    let finder_items: Vec<Item<Station>> = stations
+        .into_iter()
+        .map(|s| Item::new(s.name.clone(), s))
+        .collect();
+
+    let selected = FuzzyFinder::find(finder_items, 12)?;
+    if let Some(station) = selected {
+        println!("\rGot this station from the fuzzy finder:");
+        println!("{:?}", station);
     }
 
     Ok(())
