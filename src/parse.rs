@@ -2,8 +2,7 @@ use std::error::Error;
 use std::io::Read;
 
 use chrono::{DateTime, TimeZone, Utc};
-use serde::{self, Deserialize, Deserializer};
-use serde_repr::Deserialize_repr;
+use serde::{self, de::Unexpected, Deserialize, Deserializer};
 
 /// Attempt to parse data from the reader as tide predictions.
 ///
@@ -178,15 +177,31 @@ pub struct TidalEvent {
 #[derive(Debug, Clone, Copy, Deserialize)]
 pub struct Metres(pub f64);
 
-
 /// Represents either low or high tide.
 ///
 /// The Admiralty API response encodes low tide as 1 and high tide as 0.
-#[derive(Debug, Copy, Clone, Deserialize_repr)]
-#[repr(u8)]
+#[derive(Debug, Copy, Clone)]
 pub enum TidalEventType {
-    HighWater = 0,
-    LowWater = 1,
+    HighWater,
+    LowWater,
+}
+
+impl<'de> Deserialize<'de> for TidalEventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let num = u64::deserialize(deserializer)?;
+        match num {
+            0 => Ok(Self::HighWater),
+            1 => Ok(Self::LowWater),
+            _ => {
+                let unexp = Unexpected::Unsigned(num);
+                let exp = &"an integer either 0 or 1";
+                Err(serde::de::Error::invalid_value(unexp, exp))
+            }
+        }
+    }
 }
 
 /// Prediction of the tide height in metres at a particular time.
@@ -224,13 +239,32 @@ pub struct LunarPhase {
 /// 2. First quarter moon.
 /// 3. Full moon.
 /// 4. Last quarter moon.
-#[derive(Debug, Copy, Clone, Deserialize_repr)]
-#[repr(u8)]
+#[derive(Debug, Copy, Clone)]
 pub enum LunarPhaseType {
-    NewMoon = 1,
-    FirstQuarter = 2,
-    FullMoon = 3,
-    LastQuarter = 4,
+    NewMoon,
+    FirstQuarter,
+    FullMoon,
+    LastQuarter,
+}
+
+impl<'de> Deserialize<'de> for LunarPhaseType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let num = u64::deserialize(deserializer)?;
+        match num {
+            1 => Ok(Self::NewMoon),
+            2 => Ok(Self::FirstQuarter),
+            3 => Ok(Self::FullMoon),
+            4 => Ok(Self::LastQuarter),
+            _ => {
+                let unexp = Unexpected::Unsigned(num);
+                let exp = &"an integer from 1 to 4, inclusive.";
+                Err(serde::de::Error::invalid_value(unexp, exp))
+            }
+        }
+    }
 }
 
 /// Description of the Admirality stations API response wrapper.
