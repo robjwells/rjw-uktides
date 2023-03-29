@@ -1,51 +1,82 @@
-use std::{error::Error, process};
 use std::fs::File;
 use std::io::{BufReader, Read};
+use std::{error::Error, process};
 
 use chrono::NaiveDate;
+use chrono_tz::Europe::London;
 use clap::{Args, Parser, Subcommand};
-use fuzzy_finder::{item::Item, FuzzyFinder};
 
-use tidescli::{Station, TidePredictions};
+use tidescli::{Station, StationId, TidePredictions};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let station_bytes = &include_bytes!("../reference/stations.json")[..];
 
     let args = Cli::parse().command;
     match args {
-        Commands::Stations(StationsArgs { fetch }) => {
+        Commands::ListStations(StationsArgs { fetch }) => {
             if fetch {
                 todo!();
                 // let station_bytes = // fetch stations from the net;
             }
             display_stations(station_bytes);
-        },
-        Commands::Tides(TidesArgs { station, date }) => {
+        }
+        Commands::Tides(tides_args) => {
             // fetch tides data for station
-            let (_, _) = (station, date);
-            todo!();
-        },
-    }
+            println!("{:#?}", tides_args);
 
+            let s = tides_args.station;
+
+            let url = format!(
+                "https://easytide.admiralty.co.uk/Home/GetPredictionData?stationId={}",
+                s
+            );
+
+            let response = reqwest::blocking::get(url)?;
+            let body = response.text().unwrap();
+            match tidescli::tides_from_reader(body.as_bytes()) {
+                Ok(tides) => {
+                    do_something_with_tides(tides, tides_args.date);
+                }
+                Err(e) => {
+                    eprintln!("Got error: {e:?}\n\n");
+                    eprintln!("Response body was:\n{}\n", body);
+                }
+            }
+        }
+    }
     Ok(())
 }
 
+fn do_something_with_tides(tides: TidePredictions, date: NaiveDate) {
+    let todays_tides = tides
+        .tidal_event_list
+        .into_iter()
+        .filter(|e| e.date == date);
+
+    for tide in todays_tides {
+        let time = tide
+            .date_time
+            .with_timezone(&London)
+            .format("%l.%M%p")
+            .to_string()
+            .to_ascii_lowercase();
+        println!("{}\t{:#?}", tide.event_type, time);
+    }
+}
+
 fn display_stations(rdr: impl Read) {
-    let stations = match tidescli::stations_from_reader(rdr) {
-        Ok(s) => s,
+    match tidescli::stations_from_reader(rdr) {
+        Ok(mut s) => {
+            s.sort();
+            for Station { id, name, .. } in s {
+                println!("{}\t{}", id, name);
+            }
+        }
         Err(e) => {
             eprintln!("Failed to parse stations data: {e}");
             process::exit(-1);
-        },
+        }
     };
-    let finder_items: Vec<Item<Station>> = stations
-        .into_iter()
-        .map(|s| Item::new(s.name.clone(), s))
-        .collect();
-
-    if let Ok(Some(station)) = FuzzyFinder::find(finder_items, 12) {
-        println!("\r{0}\t{1}", station.id, station.name);
-    }
 }
 
 fn _read_tides_reference_file() -> Result<TidePredictions, Box<dyn Error>> {
@@ -71,7 +102,7 @@ struct Cli {
 
 #[derive(Subcommand, Clone, Debug)]
 enum Commands {
-    Stations(StationsArgs),
+    ListStations(StationsArgs),
     Tides(TidesArgs),
 }
 
@@ -88,7 +119,7 @@ struct StationsArgs {
 struct TidesArgs {
     /// ID of the desired tidal station.
     #[arg(short, long)]
-    station: String,
+    station: StationId,
     /// Date of tidal data to display (YYYY-MM-DD).
     #[arg(short, long)]
     date: NaiveDate,

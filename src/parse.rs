@@ -1,7 +1,8 @@
-use std::error::Error;
 use std::io::Read;
+use std::str::FromStr;
+use std::{error::Error, fmt::Display};
 
-use chrono::{DateTime, TimeZone, Utc};
+use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use serde::{self, de::Unexpected, Deserialize, Deserializer};
 
 /// Attempt to parse data from the reader as tide predictions.
@@ -97,6 +98,20 @@ where
         .map_err(serde::de::Error::custom)
 }
 
+fn deserialize_date_without_tz<'de, D>(deserializer: D) -> Result<NaiveDate, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let datetime = deserialize_datetime_without_tz(deserializer);
+    match datetime {
+        Ok(d) => Ok(d.date_naive()),
+        Err(e) => {
+            eprintln!("Failed to parse naive date as naive datetime: {e:?}");
+            Err(e)
+        }
+    }
+}
+
 /// Deserialize the "features" object of the GetStations endpoint result as `Station` structs.
 ///
 /// The Admiralty public stations API contains unnecessary keys and unnecessarily nested data
@@ -153,8 +168,8 @@ pub struct TidalEvent {
     /// The day on which this tide occurs.
     ///
     /// Despite being a datetime, only the date portion is valid.
-    #[serde(deserialize_with = "deserialize_datetime_without_tz")]
-    pub date: DateTime<Utc>,
+    #[serde(deserialize_with = "deserialize_date_without_tz")]
+    pub date: NaiveDate,
 
     /// The predicted datetime at which the tide measurement will occur.
     #[serde(deserialize_with = "deserialize_datetime_without_tz")]
@@ -184,6 +199,16 @@ pub struct Metres(pub f64);
 pub enum TidalEventType {
     HighWater,
     LowWater,
+}
+
+impl Display for TidalEventType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let text = match self {
+            TidalEventType::HighWater => "High tide",
+            TidalEventType::LowWater => "Low tide",
+        };
+        write!(f, "{text}")
+    }
 }
 
 impl<'de> Deserialize<'de> for TidalEventType {
@@ -285,14 +310,37 @@ struct StationsData {
     features: Vec<Station>,
 }
 
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct StationId(pub String);
+
+impl From<String> for StationId {
+    fn from(value: String) -> Self {
+        Self(value)
+    }
+}
+
+impl FromStr for StationId {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self(s.to_owned()))
+    }
+}
+
+impl Display for StationId {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
 /// Details of a specific tidal measurement station.
 #[derive(Debug, Clone)]
 pub struct Station {
     /// ID used to identify the station when requesting tidal predictions.
     ///
     /// The ID appears numeric but leading zeroes are required when making the tidal prediction
-    /// request, hence it is deserialized as a `String`.
-    pub id: String,
+    /// request, hence it is deserialized as a newtype-wrapped `String`.
+    pub id: StationId,
     /// The name of the location of the station.
     pub name: String,
     /// The "country" in which the station is placed.
@@ -324,7 +372,7 @@ impl Eq for Station {}
 
 impl Ord for Station {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.id.as_str().cmp(&other.id)
+        self.id.cmp(&other.id)
     }
 }
 
@@ -371,7 +419,7 @@ struct StationFeatureGeometry {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "PascalCase")]
 struct StationFeatureProperties {
-    id: String,
+    id: StationId,
     name: String,
     country: String,
     continuous_heights_available: bool,
