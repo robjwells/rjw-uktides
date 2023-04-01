@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::{BufReader, Read};
 use std::{error::Error, process};
 
+use bytes::Bytes;
 use chrono::NaiveDate;
 use chrono_tz::Europe::London;
 use clap::{Args, Parser, Subcommand};
@@ -9,16 +10,18 @@ use clap::{Args, Parser, Subcommand};
 use tidescli::{Station, StationId, TidePredictions};
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let station_bytes = &include_bytes!("../reference/stations.json")[..];
+    let stations_baked_bytes = Bytes::from_static(include_bytes!("../reference/stations.json"));
 
     let args = Cli::parse().command;
     match args {
         Commands::ListStations(StationsArgs { fetch }) => {
-            if fetch {
-                todo!();
-                // let station_bytes = // fetch stations from the net;
-            }
-            display_stations(station_bytes);
+            let station_bytes: Bytes = if fetch {
+                reqwest::blocking::get("https://easytide.admiralty.co.uk/Home/GetStations")?
+                    .bytes()?
+            } else {
+                stations_baked_bytes
+            };
+            display_stations(station_bytes.as_ref())
         }
         Commands::Tides(tides_args) => {
             // fetch tides data for station
