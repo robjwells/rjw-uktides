@@ -166,8 +166,6 @@ pub struct TidePredictions {
 #[serde(rename_all = "camelCase")]
 pub struct TidalEvent {
     /// The day on which this tide occurs.
-    ///
-    /// Despite being a datetime, only the date portion is valid.
     #[serde(deserialize_with = "deserialize_date_without_tz")]
     pub date: NaiveDate,
 
@@ -381,6 +379,8 @@ impl PartialOrd for Station {
         Some(self.cmp(other))
     }
 }
+#[derive(Debug, Deserialize, Copy, Clone)]
+pub struct DecimalDegrees(f64);
 
 /// Geographic coordinates (latitude and longitude) of the station.
 ///
@@ -389,9 +389,9 @@ impl PartialOrd for Station {
 pub struct Coordinates {
     // Order is important here as this struct is represented by an array in the JSON.
     /// Longitude, in decimal degrees.
-    pub lon: f64,
+    pub longitude: DecimalDegrees,
     /// Latitude, in decimal degrees.
-    pub lat: f64,
+    pub latitude: DecimalDegrees,
 }
 
 /// Station information as returned by the Admiralty API.

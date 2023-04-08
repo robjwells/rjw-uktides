@@ -1,118 +1,78 @@
-use std::fs::File;
-use std::io::{BufReader, Read};
-use std::{error::Error, process};
+use std::error::Error;
 
-use bytes::Bytes;
-use chrono::NaiveDate;
-use chrono_tz::Europe::London;
 use clap::{Args, Parser, Subcommand};
 
-use tidescli::{Station, StationId, TidePredictions};
+use tidescli::{fetch_tides, Station, StationId};
+
+const STATIONS_BAKED_BYTES: &[u8] = include_bytes!("../reference/stations.json");
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let stations_baked_bytes = Bytes::from_static(include_bytes!("../reference/stations.json"));
-
-    let args = Cli::parse().command;
-    match args {
-        Commands::ListStations(StationsArgs { fetch }) => {
-            let station_bytes: Bytes = if fetch {
-                reqwest::blocking::get("https://easytide.admiralty.co.uk/Home/GetStations")?
-                    .bytes()?
+    let Cli {
+        tides_args,
+        subcommand,
+    } = Cli::parse();
+    match (tides_args, subcommand) {
+        (None, Some(Commands::ListStations(StationsArgs { fetch }))) => {
+            let stations = if fetch {
+                tidescli::fetch_stations()?
             } else {
-                stations_baked_bytes
+                tidescli::stations_from_reader(STATIONS_BAKED_BYTES)?
             };
-            display_stations(station_bytes.as_ref())
+            display_stations(stations);
         }
-        Commands::Tides(tides_args) => {
-            // fetch tides data for station
-            println!("{:#?}", tides_args);
-
-            let s = tides_args.station;
-
-            let url = format!(
-                "https://easytide.admiralty.co.uk/Home/GetPredictionData?stationId={}",
-                s
-            );
-
-            let response = reqwest::blocking::get(url)?;
-            let body = response.text().unwrap();
-            match tidescli::tides_from_reader(body.as_bytes()) {
+        (Some(tides_args), None) => {
+            let tides = fetch_tides(tides_args.station);
+            match tides {
                 Ok(tides) => {
-                    do_something_with_tides(tides, tides_args.date);
+                    for tide in tides.tidal_event_list {
+                        println!("{:?},{}", tide.date_time, tide.event_type);
+                    }
                 }
                 Err(e) => {
                     eprintln!("Got error: {e:?}\n\n");
-                    eprintln!("Response body was:\n{}\n", body);
                 }
             }
+        }
+        misc => {
+            eprintln!("Unexpected argument state:\n{:#?}", misc);
+            return Err("Unexpected argument state.".to_owned().into());
         }
     }
     Ok(())
 }
 
-fn do_something_with_tides(tides: TidePredictions, date: NaiveDate) {
-    let todays_tides = tides
-        .tidal_event_list
-        .into_iter()
-        .filter(|e| e.date == date);
-
-    for tide in todays_tides {
-        let time = tide
-            .date_time
-            .with_timezone(&London)
-            .format("%l.%M%p")
-            .to_string()
-            .to_ascii_lowercase();
-        println!("{}\t{:#?}", tide.event_type, time);
+fn display_stations(mut s: Vec<Station>) {
+    s.sort();
+    for Station { id, name, .. } in s {
+        println!("{}\t{}", id, name);
     }
 }
 
-fn display_stations(rdr: impl Read) {
-    match tidescli::stations_from_reader(rdr) {
-        Ok(mut s) => {
-            s.sort();
-            for Station { id, name, .. } in s {
-                println!("{}\t{}", id, name);
-            }
-        }
-        Err(e) => {
-            eprintln!("Failed to parse stations data: {e}");
-            process::exit(-1);
-        }
-    };
-}
-
-fn _read_tides_reference_file() -> Result<TidePredictions, Box<dyn Error>> {
-    let tides = File::open("./reference/tides.json")?;
-    let tides = BufReader::new(tides);
-    let tides = tidescli::tides_from_reader(tides)?;
-    Ok(tides)
-}
-
-fn _read_stations_reference_file() -> Result<Vec<Station>, Box<dyn Error>> {
-    let stations = File::open("./reference/stations.json")?;
-    let stations = BufReader::new(stations);
-    let stations = tidescli::stations_from_reader(stations)?;
-    Ok(stations)
-}
-
-/// CLI hello!
+/// Fetch high and low tide times from the UK Hydrographic Office.
+///
+/// Data shown is that currently available from the web service used by
+/// the official EasyTide website.
 #[derive(Parser, Debug)]
+#[command(args_conflicts_with_subcommands = true)]
 struct Cli {
+    #[command(flatten)]
+    tides_args: Option<TidesArgs>,
+
     #[command(subcommand)]
-    command: Commands,
+    subcommand: Option<Commands>,
 }
 
 #[derive(Subcommand, Clone, Debug)]
 enum Commands {
     ListStations(StationsArgs),
-    Tides(TidesArgs),
 }
 
 /// List all UK tidal stations supported by the UKHO.
 #[derive(Args, Clone, Debug)]
 struct StationsArgs {
     /// Fetch the current list of tidal stations from the UKHO web service.
+    ///
+    /// If this argument is omitted, stations data built into the binary will be used.
     #[arg(short, long)]
     fetch: bool,
 }
@@ -123,7 +83,4 @@ struct TidesArgs {
     /// ID of the desired tidal station.
     #[arg(short, long)]
     station: StationId,
-    /// Date of tidal data to display (YYYY-MM-DD).
-    #[arg(short, long)]
-    date: NaiveDate,
 }
