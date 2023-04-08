@@ -186,6 +186,26 @@ pub struct TidalEvent {
     pub is_approximate_time: Option<String>,
 }
 
+impl PartialEq for TidalEvent {
+    fn eq(&self, other: &Self) -> bool {
+        self.date_time == other.date_time
+    }
+}
+
+impl Eq for TidalEvent {}
+
+impl Ord for TidalEvent {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.date_time.cmp(&other.date_time)
+    }
+}
+
+impl PartialOrd for TidalEvent {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 /// Tide height in metres as an `f64`, wrapped in a newtype to make the measurement unit clear.
 #[derive(Debug, Clone, Copy, Deserialize)]
 pub struct Metres(pub f64);
