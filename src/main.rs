@@ -2,9 +2,9 @@ use std::error::Error;
 
 use clap::{Args, Parser, Subcommand};
 
-use tidescli::{fetch_tides, Station, StationId};
+use rjw_uktides::{fetch_tides, Station, StationId};
 
-const STATIONS_BAKED_BYTES: &[u8] = include_bytes!("../reference/stations.json");
+const STATIONS_BAKED_BYTES: &[u8] = include_bytes!("../stations.json");
 
 fn main() -> Result<(), Box<dyn Error>> {
     let Cli {
@@ -14,9 +14,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     match (tides_args, subcommand) {
         (None, Some(Commands::ListStations(StationsArgs { fetch }))) => {
             let stations = if fetch {
-                tidescli::fetch_stations()?
+                rjw_uktides::fetch_stations()?
             } else {
-                tidescli::stations_from_reader(STATIONS_BAKED_BYTES)?
+                rjw_uktides::stations_from_reader(STATIONS_BAKED_BYTES)?
             };
             display_stations(stations);
         }

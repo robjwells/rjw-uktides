@@ -29,7 +29,7 @@ use serde::{self, de::Unexpected, Deserialize, Deserializer};
 /// let file = File::open("./reference/tides.json")
 ///     .expect("Failed to open tides reference file.");
 /// let bufreader = BufReader::new(file);
-/// let tides = tidescli::tides_from_reader(bufreader)
+/// let tides = rjw_uktides::tides_from_reader(bufreader)
 ///     .expect("Failed to read file as tides data.");
 /// ```
 pub fn tides_from_reader(rdr: impl Read) -> Result<TidePredictions, Box<dyn Error>> {
