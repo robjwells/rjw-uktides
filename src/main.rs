@@ -21,7 +21,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             display_stations(stations);
         }
         (Some(tides_args), None) => {
-            let tides = fetch_tides(tides_args.station);
+            let tides = fetch_tides(&tides_args.station);
             match tides {
                 Ok(tides) => {
                     for tide in tides.tidal_event_list {
