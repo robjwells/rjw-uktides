@@ -4,8 +4,6 @@ use clap::{Args, Parser, Subcommand};
 
 use rjw_uktides::{fetch_tides, Station, StationId};
 
-const STATIONS_BAKED_BYTES: &[u8] = include_bytes!("../stations.json");
-
 fn main() -> Result<(), Box<dyn Error>> {
     let Cli {
         tides_args,
@@ -16,7 +14,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             let stations = if fetch {
                 rjw_uktides::fetch_stations()?
             } else {
-                rjw_uktides::stations_from_reader(STATIONS_BAKED_BYTES)?
+                rjw_uktides::cached_stations()
             };
             display_stations(stations);
         }
