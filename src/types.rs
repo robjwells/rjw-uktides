@@ -1,0 +1,220 @@
+use serde::Deserialize;
+
+#[derive(Debug, Copy, Clone, Deserialize)]
+pub struct DecimalDegrees(#[allow(dead_code)] f64);
+
+/// Geographic coordinates (latitude and longitude) of the station.
+///
+/// It is not clear which coordinate system these are from; perhaps WGS 84.
+#[derive(Debug, Copy, Clone, Deserialize)]
+pub struct Coordinates {
+    // Order is important here as this struct is represented by an array in the JSON.
+    /// Longitude, in decimal degrees.
+    pub longitude: DecimalDegrees,
+    /// Latitude, in decimal degrees.
+    pub latitude: DecimalDegrees,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
+pub struct StationId(pub String);
+
+impl From<String> for StationId {
+    fn from(value: String) -> Self {
+        Self(value)
+    }
+}
+
+impl std::str::FromStr for StationId {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self(s.to_owned()))
+    }
+}
+
+impl std::fmt::Display for StationId {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+
+/// Details of a specific tidal measurement station.
+#[derive(Debug, Clone)]
+pub struct Station {
+    /// ID used to identify the station when requesting tidal predictions.
+    ///
+    /// The ID appears numeric but leading zeroes are required when making the tidal prediction
+    /// request, hence it is deserialized as a newtype-wrapped `String`.
+    pub id: StationId,
+    /// The name of the location of the station.
+    pub name: String,
+    /// The "country" in which the station is placed.
+    ///
+    /// The possibilities are:
+    ///
+    /// - "Channel Islands"
+    /// - "England"
+    /// - "Isle of Man"
+    /// - "Northern Ireland"
+    /// - "Scotland"
+    /// - "Wales"
+    // TODO: This should be an enum.
+    pub country: String,
+    /// Geographic coordinates (latitude and longitude) of the station.
+    ///
+    /// It is not clear which coordinate system these are from; perhaps WGS 84.
+    pub location: Coordinates,
+    /// Whether the station can provide continuous height measurements.
+    pub continuous_heights_available: bool,
+}
+
+impl PartialEq for Station {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
+
+impl Eq for Station {}
+
+impl Ord for Station {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.id.cmp(&other.id)
+    }
+}
+
+impl PartialOrd for Station {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+#[derive(Debug)]
+pub enum StationDataSource {
+    Cached,
+    FetchLatest,
+}
+
+/// A wrapper for all of the tide prediction data from the Admiralty API.
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TidePredictions {
+    /// A note appended to the whole response.
+    ///
+    /// This is usually a warning that the "high water duration period can occur over an extended
+    /// time period."
+    pub footer_note: String,
+    /// Moon phase data.
+    pub lunar_phase_list: Vec<LunarPhase>,
+    /// Low- and high-tide event data.
+    ///
+    /// These include alternating low and high tides, their predicted height and when they will
+    /// occur.
+    pub tidal_event_list: Vec<TidalEvent>,
+    /// Half-hourly tide height predictions.
+    pub tidal_height_occurrence_list: Vec<TidalHeightOccurence>,
+}
+
+/// An instance of low or high tide.
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TidalEvent {
+    /// The day on which this tide occurs.
+    #[serde(deserialize_with = "crate::parse::deserialize_date_without_tz")]
+    pub date: jiff::civil::Date,
+
+    /// The predicted datetime at which the tide measurement will occur.
+    #[serde(deserialize_with = "crate::parse::deserialize_datetime_without_tz")]
+    pub date_time: jiff::Zoned,
+
+    /// Discriminator between high and low tide.
+    pub event_type: TidalEventType,
+
+    /// Predicted tide height as a newtype-wrapped `f64`.
+    pub height: Metres,
+
+    /// Typically `null` in the (semi-)public API response.
+    pub is_approximate_height: Option<String>,
+
+    /// Typically `null` in the (semi-)public API response.
+    pub is_approximate_time: Option<String>,
+}
+
+impl PartialEq for TidalEvent {
+    fn eq(&self, other: &Self) -> bool {
+        self.date_time == other.date_time
+    }
+}
+
+impl Eq for TidalEvent {}
+
+impl Ord for TidalEvent {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.date_time.cmp(&other.date_time)
+    }
+}
+
+impl PartialOrd for TidalEvent {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+/// Tide height in metres as an `f64`, wrapped in a newtype to make the measurement unit clear.
+#[derive(Debug, Clone, Copy, Deserialize)]
+pub struct Metres(pub f64);
+
+/// Represents either low or high tide.
+///
+/// The Admiralty API response encodes low tide as 1 and high tide as 0.
+#[derive(Debug, Copy, Clone)]
+pub enum TidalEventType {
+    HighWater,
+    LowWater,
+}
+
+impl std::fmt::Display for TidalEventType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let text = match self {
+            TidalEventType::HighWater => "High tide",
+            TidalEventType::LowWater => "Low tide",
+        };
+        write!(f, "{text}")
+    }
+}
+
+
+/// Prediction of the tide height in metres at a particular time.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TidalHeightOccurence {
+    /// Time of prediction, typically every half-hour.
+    #[serde(deserialize_with = "crate::parse::deserialize_zulu_datetime_to_zoned")]
+    pub date_time: jiff::Zoned,
+    /// Predicted tide height as a newtype-wrapped `f64`.
+    pub height: Metres,
+}
+
+/// Prediction of a particular lunar phase.
+#[derive(Debug, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct LunarPhase {
+    /// Datetime of the lunar phase occurrence.
+    #[serde(deserialize_with = "crate::parse::deserialize_datetime_without_tz")]
+    pub date_time: jiff::Zoned,
+
+    /// The lunar phase itself.
+    pub lunar_phase_type: LunarPhaseType,
+}
+
+/// Represents a particular phase of the moon.
+///
+/// The u8 discriminants match the numbers used in the semi-public API.
+#[derive(Debug, Copy, Clone)]
+#[repr(u8)]
+pub enum LunarPhaseType {
+    NewMoon = 1,
+    FirstQuarter = 2,
+    FullMoon = 3,
+    LastQuarter = 4,
+}
+

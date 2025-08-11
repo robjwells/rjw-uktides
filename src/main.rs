@@ -2,7 +2,9 @@ use std::error::Error;
 
 use clap::{Args, Parser, Subcommand};
 
-use rjw_uktides::{fetch_tides, Station, StationId};
+pub use rjw_uktides::{Station, StationId};
+
+mod fetch;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let Cli {
@@ -12,14 +14,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     match (tides_args, subcommand) {
         (None, Some(Commands::ListStations(StationsArgs { fetch }))) => {
             let stations = if fetch {
-                rjw_uktides::fetch_stations()?
+                fetch::fetch_stations()?
             } else {
                 rjw_uktides::cached_stations()
             };
             display_stations(stations);
         }
         (Some(tides_args), None) => {
-            let tides = fetch_tides(&tides_args.station);
+            let tides = fetch::fetch_tides(&tides_args.station);
             match tides {
                 Ok(tides) => {
                     for tide in tides.tidal_event_list {

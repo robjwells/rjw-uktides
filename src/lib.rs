@@ -1,51 +1,115 @@
 mod parse;
+mod types;
 
-use std::error::Error;
+use std::io::Read;
 
-pub use parse::*;
-use reqwest::blocking::Client;
+use url::Url;
+
+pub use crate::types::{Station, StationDataSource, StationId, TidePredictions};
 
 const STATIONS_BAKED_BYTES: &[u8] = include_bytes!("../stations.json");
 
 const STATIONS_URL: &str = "https://easytide.admiralty.co.uk/Home/GetStations";
+const TIDES_URL: &str = "https://easytide.admiralty.co.uk/Home/GetPredictionData";
+
+#[derive(Debug)]
+pub enum Error<'a> {
+    ParseError(serde_json::Error),
+    FetchError(ureq::Error),
+    NoSuchStation(&'a StationId),
+}
+
+impl std::fmt::Display for Error<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // TODO: This is a dummy implementation
+        write!(f, "{self:?}")
+    }
+}
+
+impl std::error::Error for Error<'_> {}
 
 pub fn cached_stations() -> Vec<Station> {
     stations_from_reader(STATIONS_BAKED_BYTES)
         .expect("Embedded stations data must be verified as valid.")
 }
 
-pub fn fetch_stations() -> Result<Vec<Station>, Box<dyn Error>> {
-    let bytes = reqwest::blocking::get(STATIONS_URL)?.bytes()?;
-    stations_from_reader(bytes.as_ref())
+/// Get the URL for information on all available stations.
+pub fn stations_list_url() -> Url {
+    STATIONS_URL
+        .parse()
+        .expect("Station list URL is known to be valid")
 }
 
-pub fn fetch_tides(station: &StationId) -> Result<TidePredictions, Box<dyn Error>> {
-    let url = "https://easytide.admiralty.co.uk/Home/GetPredictionData";
-    let response = Client::new()
-        .get(url)
-        .query(&[("stationId", station.0.as_str())])
-        .send()?;
-    let body = response.text()?;
-    tides_from_reader(body.as_bytes())
+/// Construct a tide-prediction URL for the given station.
+pub fn tide_predictions_url(station: &StationId) -> Url {
+    Url::parse_with_params(TIDES_URL, &[("stationID", &station.0)])
+        .expect("Tide predictions URL is known to be valid")
 }
 
-#[derive(Debug)]
-pub enum StationDataSource {
-    Cached,
-    FetchLatest,
+/// Attempt to parse data from the reader as tide predictions.
+///
+/// The data should be JSON sourced from the Admiralty (semi-)public
+/// Home/GetPredictions endpoint.
+///
+/// # Errors
+///
+/// This function will return an error if it cannot parse the data
+/// from the reader as JSON or as JSON that encodes tide predictions.
+/// Currently the error will only be a `serde_json::Error` but is
+/// boxed to hide changes in the implementation in the future.
+///
+/// (`serde_json::Error` itself just contains a Boxed error, but this
+/// extra indirection isn't expected to cause performance problems as
+/// this function is effectively the "end of the line" for the error.)
+///
+/// # Examples
+/// ```
+/// use std::fs::File;
+/// use std::io::BufReader;
+///
+/// let file = File::open("./reference/tides.json")
+///     .expect("Failed to open tides reference file.");
+/// let bufreader = BufReader::new(file);
+/// let tides = rjw_uktides::tides_from_reader(bufreader)
+///     .expect("Failed to read file as tides data.");
+/// ```
+pub fn tides_from_reader<'a>(rdr: impl Read) -> Result<TidePredictions, Error<'a>> {
+    serde_json::from_reader(rdr).map_err(Error::ParseError)
 }
 
-pub fn station_details(
-    id: &StationId,
-    source: StationDataSource,
-) -> Result<Station, Box<dyn Error>> {
-    use self::StationDataSource::*;
-    let stations = match source {
-        Cached => cached_stations(),
-        FetchLatest => fetch_stations()?,
-    };
-    stations
-        .into_iter()
-        .find(|s| &s.id == id)
-        .ok_or_else(|| format!("No station with ID {}", id).into())
+/// Attempt to extract tide station information from the reader.
+///
+/// The data should be JSON sourced from the Admiralty (semi-)public
+/// Home/GetStations endpoint. The "features" property of the returned
+/// JSON is returned as a `Vec` of `Station`.
+///
+/// The [`Station`] struct simplifies the nested structure of the
+/// JSON returned by the GetStations endpoint.
+///
+/// # Errors
+///
+/// This function will return an error if it cannot parse the data
+/// from the reader as JSON or as JSON that encodes station data.
+/// Currently the error will only be a `serde_json::Error` but is
+/// boxed to hide changes in the implementation in the future.
+///
+/// (`serde_json::Error` itself just contains a Boxed error, but this
+/// extra indirection isn't expected to cause performance problems as
+/// this function is effectively the "end of the line" for the error.)
+///
+/// # Examples
+/// ```
+/// use std::fs::File;
+/// use std::io::BufReader;
+///
+/// let file = File::open("./reference/stations.json")
+///     .expect("Failed to open stations reference file.");
+/// let bufreader = BufReader::new(file);
+/// let stations = rjw_uktides::stations_from_reader(bufreader)
+///     .expect("Failed to read file as stations data.");
+/// ```
+pub fn stations_from_reader<'a>(rdr: impl Read) -> Result<Vec<Station>, Error<'a>> {
+    serde_json::from_reader(rdr)
+        .map(|sd: crate::parse::StationsData| sd.features)
+        .map_err(Error::ParseError)
 }
