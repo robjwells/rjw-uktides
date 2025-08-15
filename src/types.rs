@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
 #[derive(Debug, Copy, Clone, Deserialize)]
-pub struct DecimalDegrees(#[allow(dead_code)] f64);
+pub struct DecimalDegrees(pub f64);
 
 /// Geographic coordinates (latitude and longitude) of the station.
 ///
