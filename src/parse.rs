@@ -37,15 +37,6 @@ where
         .map_err(serde::de::Error::custom)
 }
 
-pub(crate) fn deserialize_date_without_tz<'de, D>(
-    deserializer: D,
-) -> Result<jiff::civil::Date, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    deserialize_datetime_without_tz(deserializer).map(|z| z.date())
-}
-
 pub(crate) fn deserialize_zulu_datetime_to_zoned<'de, D>(
     deserializer: D,
 ) -> Result<jiff::Zoned, D::Error>

@@ -118,10 +118,6 @@ pub struct TidePredictions {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TidalEvent {
-    /// The day on which this tide occurs.
-    #[serde(deserialize_with = "crate::parse::deserialize_date_without_tz")]
-    pub date: jiff::civil::Date,
-
     /// The predicted datetime at which the tide measurement will occur.
     #[serde(deserialize_with = "crate::parse::deserialize_datetime_without_tz")]
     pub date_time: jiff::Zoned,
@@ -137,6 +133,12 @@ pub struct TidalEvent {
 
     /// Typically `null` in the (semi-)public API response.
     pub is_approximate_time: Option<String>,
+}
+
+impl TidalEvent {
+    pub fn date(&self) -> jiff::civil::Date {
+        self.date_time.date()
+    }
 }
 
 impl PartialEq for TidalEvent {
@@ -182,7 +184,6 @@ impl std::fmt::Display for TidalEventType {
     }
 }
 
-
 /// Prediction of the tide height in metres at a particular time.
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -217,4 +218,3 @@ pub enum LunarPhaseType {
     FullMoon = 3,
     LastQuarter = 4,
 }
-
