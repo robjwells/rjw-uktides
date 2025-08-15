@@ -43,8 +43,19 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 fn display_stations(mut s: Vec<Station>) {
     s.sort();
-    for Station { id, name, .. } in s {
-        println!("{}\t{}", id, name);
+    for Station {
+        id,
+        name,
+        country,
+        location,
+        continuous_heights_available,
+    } in s
+    {
+        print!("{:5}\t{:<34}\t{:16}\t{}", id, name, country.to_string(), location);
+        if !continuous_heights_available {
+            print!("\tno continuous heights")
+        }
+        println!()
     }
 }
 

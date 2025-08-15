@@ -3,6 +3,13 @@ use serde::Deserialize;
 #[derive(Debug, Copy, Clone, Deserialize)]
 pub struct DecimalDegrees(pub f64);
 
+impl std::fmt::Display for DecimalDegrees {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // Width of 6 to encompass -1.000 and 50.000.
+        write!(f, "{: >6.3}", self.0)
+    }
+}
+
 /// Geographic coordinates (latitude and longitude) of the station.
 ///
 /// It is not clear which coordinate system these are from; perhaps WGS 84.
@@ -13,6 +20,12 @@ pub struct Coordinates {
     pub longitude: DecimalDegrees,
     /// Latitude, in decimal degrees.
     pub latitude: DecimalDegrees,
+}
+
+impl std::fmt::Display for Coordinates {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "[{}, {}]", self.longitude, self.latitude)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
