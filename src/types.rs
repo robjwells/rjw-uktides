@@ -55,6 +55,7 @@ impl std::fmt::Display for StationId {
 pub enum Country {
     ChannelIslands,
     England,
+    Ireland,
     IsleOfMan,
     NorthernIreland,
     Scotland,
@@ -62,17 +63,18 @@ pub enum Country {
 }
 
 impl std::str::FromStr for Country {
-    type Err = &'static str;
+    type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "Channel Islands" => Ok(Self::ChannelIslands),
             "England" => Ok(Self::England),
+            "Ireland" => Ok(Self::Ireland),
             "Isle of Man" => Ok(Self::IsleOfMan),
             "Northern Ireland" => Ok(Self::NorthernIreland),
             "Scotland" => Ok(Self::Scotland),
             "Wales" => Ok(Self::Wales),
-            _ => Err("Unexpected country name"),
+            other => Err(format!("Unexpected country name {:?}", other)),
         }
     }
 }
@@ -82,6 +84,7 @@ impl std::fmt::Display for Country {
         let name = match self {
             Self::ChannelIslands => "Channel Islands",
             Self::England => "England",
+            Self::Ireland => "Ireland",
             Self::IsleOfMan => "Isle of Man",
             Self::NorthernIreland => "Northern Ireland",
             Self::Scotland => "Scotland",
