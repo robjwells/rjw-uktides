@@ -1,22 +1,22 @@
 use std::str::FromStr;
 
-// use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 use serde::{self, Deserialize, Deserializer, de::Unexpected};
 
 use crate::types::{Coordinates, LunarPhaseType, Station, StationId, TidalEventType};
 
-/// Parse ISO 8601 datetimes missing a timezone and with optional fractional seconds as UTC.
+/// Parse ISO 8601 datetimes missing a timezone and with optional fractional seconds.
 ///
 /// The Admiralty tides API returns dates as datetimes without a timezone specifier, and returns
 /// some datetimes with a half-second appended (`.5`) and also without a datetime.
 ///
 /// The API documentation on the Admirality website describes these dates and datetimes as being in
-/// GMT, so they are parsed here as Chrono UTC datetimes.
+/// GMT, so they are parsed initially as "naive" datetimes, then given the UTC timezone, then
+/// finally converted from UTC to the Europe/London timezone
 ///
 /// # Errors
 ///
-/// This function will return an error if `serde_json` fails to deserialize the data as a `String`
-/// or if `chrono` fails to parse that `String` in `%Y-%m-%dT%H:%M:%S` format.
+/// This function will return an error if `serde_json` fails to deserialize the data as a string
+/// or if `jiff` fails to parse that string in `%Y-%m-%dT%H:%M:%S` format.
 pub(crate) fn deserialize_datetime_without_tz<'de, D>(
     deserializer: D,
 ) -> Result<jiff::Zoned, D::Error>
@@ -37,6 +37,9 @@ where
         .map_err(serde::de::Error::custom)
 }
 
+/// Parse an ISO 8601 datetime with a trailing Z.
+///
+/// The tidal height occurrences (the continuous height predictions) use this format.
 pub(crate) fn deserialize_zulu_datetime_to_zoned<'de, D>(
     deserializer: D,
 ) -> Result<jiff::Zoned, D::Error>
