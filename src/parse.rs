@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use serde::{self, Deserialize, Deserializer, de::Unexpected};
 
-use crate::types::{Coordinates, LunarPhaseType, Station, StationId, TidalEventType};
+use crate::types::{Coordinates, Country, LunarPhaseType, Station, StationId, TidalEventType};
 
 /// Parse ISO 8601 datetimes missing a timezone and with optional fractional seconds.
 ///
@@ -126,8 +126,19 @@ struct StationFeatureGeometry {
 struct StationFeatureProperties {
     id: StationId,
     name: String,
-    country: String,
+    country: Country,
     continuous_heights_available: bool,
+}
+
+impl<'de> Deserialize<'de> for Country {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        String::deserialize(deserializer)?
+            .parse()
+            .map_err(serde::de::Error::custom)
+    }
 }
 
 impl<'de> Deserialize<'de> for TidalEventType {

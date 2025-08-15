@@ -38,6 +38,46 @@ impl std::fmt::Display for StationId {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+pub enum Country {
+    ChannelIslands,
+    England,
+    IsleOfMan,
+    NorthernIreland,
+    Scotland,
+    Wales,
+}
+
+impl std::str::FromStr for Country {
+    type Err = &'static str;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Channel Islands" => Ok(Self::ChannelIslands),
+            "England" => Ok(Self::England),
+            "Isle of Man" => Ok(Self::IsleOfMan),
+            "Northern Ireland" => Ok(Self::NorthernIreland),
+            "Scotland" => Ok(Self::Scotland),
+            "Wales" => Ok(Self::Wales),
+            _ => Err("Unexpected country name"),
+        }
+    }
+}
+
+impl std::fmt::Display for Country {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let name = match self {
+            Self::ChannelIslands => "Channel Islands",
+            Self::England => "England",
+            Self::IsleOfMan => "Isle of Man",
+            Self::NorthernIreland => "Northern Ireland",
+            Self::Scotland => "Scotland",
+            Self::Wales => "Wales",
+        };
+        write!(f, "{}", name)
+    }
+}
+
 /// Details of a specific tidal measurement station.
 #[derive(Debug, Clone)]
 pub struct Station {
@@ -48,18 +88,8 @@ pub struct Station {
     pub id: StationId,
     /// The name of the location of the station.
     pub name: String,
-    /// The "country" in which the station is placed.
-    ///
-    /// The possibilities are:
-    ///
-    /// - "Channel Islands"
-    /// - "England"
-    /// - "Isle of Man"
-    /// - "Northern Ireland"
-    /// - "Scotland"
-    /// - "Wales"
-    // TODO: This should be an enum.
-    pub country: String,
+    /// The country in which the station is placed.
+    pub country: Country,
     /// Geographic coordinates (latitude and longitude) of the station.
     ///
     /// It is not clear which coordinate system these are from; perhaps WGS 84.
