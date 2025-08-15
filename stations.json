@@ -103,6 +103,22 @@
         "type": "Point",
         "coordinates": [
           -8.566666,
+          54.3
+        ]
+      },
+      "properties": {
+        "Id": "0689",
+        "Name": "Sligo Harbour (Oyster Island)",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.566666,
           57.8
         ]
       },
@@ -126,6 +142,982 @@
         "Id": "0324",
         "Name": "Rockall",
         "Country": "Scotland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.166666,
+          55.166666
+        ]
+      },
+      "properties": {
+        "Id": "0672",
+        "Name": "Inishbofin Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.316666,
+          55.066666
+        ]
+      },
+      "properties": {
+        "Id": "0681",
+        "Name": "Gweedore Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.433333,
+          54.983333
+        ]
+      },
+      "properties": {
+        "Id": "0682",
+        "Name": "Burtonport",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.5,
+          54.783333
+        ]
+      },
+      "properties": {
+        "Id": "0683",
+        "Name": "Loughros More Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.433333,
+          54.633333
+        ]
+      },
+      "properties": {
+        "Id": "0685",
+        "Name": "KILLYBEGS",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.2,
+          54.633333
+        ]
+      },
+      "properties": {
+        "Id": "0686",
+        "Name": "Donegal Harbour (Salt Hill Quay)",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.45,
+          54.466666
+        ]
+      },
+      "properties": {
+        "Id": "0688",
+        "Name": "Mullaghmore",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.583333,
+          54.25
+        ]
+      },
+      "properties": {
+        "Id": "0690",
+        "Name": "Ballysadare Bay (Culleenamore)",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.1,
+          54.216666
+        ]
+      },
+      "properties": {
+        "Id": "0692",
+        "Name": "Killala Bay (Inishcrone)",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.883333,
+          54.266666
+        ]
+      },
+      "properties": {
+        "Id": "0693",
+        "Name": "Ballyglass (Broad Haven)",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.066666,
+          54.1
+        ]
+      },
+      "properties": {
+        "Id": "0694",
+        "Name": "Blacksod Quay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.883333,
+          54.0
+        ]
+      },
+      "properties": {
+        "Id": "0695",
+        "Name": "Inishbiggle",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.95,
+          53.8
+        ]
+      },
+      "properties": {
+        "Id": "0696",
+        "Name": "Clare Island",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.666666,
+          53.833333
+        ]
+      },
+      "properties": {
+        "Id": "0697",
+        "Name": "Inishgort",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.9,
+          53.766666
+        ]
+      },
+      "properties": {
+        "Id": "0700",
+        "Name": "Roonah Quay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.883333,
+          53.633333
+        ]
+      },
+      "properties": {
+        "Id": "0701",
+        "Name": "Killary Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.2,
+          53.616666
+        ]
+      },
+      "properties": {
+        "Id": "0702",
+        "Name": "Bofin Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.066666,
+          53.483333
+        ]
+      },
+      "properties": {
+        "Id": "0703",
+        "Name": "Clifden Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.233333,
+          53.4
+        ]
+      },
+      "properties": {
+        "Id": "0704",
+        "Name": "Slyne Head",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.916666,
+          53.383333
+        ]
+      },
+      "properties": {
+        "Id": "0705",
+        "Name": "Roundstone Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.733333,
+          53.316666
+        ]
+      },
+      "properties": {
+        "Id": "0706",
+        "Name": "Kilkieran Cove",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.566666,
+          53.266666
+        ]
+      },
+      "properties": {
+        "Id": "0706A",
+        "Name": "Rossaveel",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.666666,
+          53.116666
+        ]
+      },
+      "properties": {
+        "Id": "0707",
+        "Name": "Inishmore (Killeany Bay)",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.05,
+          53.266666
+        ]
+      },
+      "properties": {
+        "Id": "0709",
+        "Name": "GALWAY",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.383333,
+          52.933333
+        ]
+      },
+      "properties": {
+        "Id": "0711",
+        "Name": "Liscannor",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.5,
+          52.8
+        ]
+      },
+      "properties": {
+        "Id": "0712",
+        "Name": "Seafield Point",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.866666,
+          52.566666
+        ]
+      },
+      "properties": {
+        "Id": "0713",
+        "Name": "Kilbaha Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.7,
+          52.6
+        ]
+      },
+      "properties": {
+        "Id": "0713A",
+        "Name": "Carrigaholt",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.5,
+          52.633333
+        ]
+      },
+      "properties": {
+        "Id": "0714",
+        "Name": "Kilrush",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.35,
+          52.583333
+        ]
+      },
+      "properties": {
+        "Id": "0715",
+        "Name": "TARBERT ISLAND",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.116666,
+          52.616666
+        ]
+      },
+      "properties": {
+        "Id": "0716",
+        "Name": "FOYNES ISLAND",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.833333,
+          52.666666
+        ]
+      },
+      "properties": {
+        "Id": "0717",
+        "Name": "Mellon Point",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.633333,
+          52.666666
+        ]
+      },
+      "properties": {
+        "Id": "0718",
+        "Name": "Limerick Dock",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.983333,
+          52.716666
+        ]
+      },
+      "properties": {
+        "Id": "0719",
+        "Name": "Coney Island",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.866666,
+          52.266666
+        ]
+      },
+      "properties": {
+        "Id": "0721",
+        "Name": "Fenit Pier",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.4,
+          52.2
+        ]
+      },
+      "properties": {
+        "Id": "0722",
+        "Name": "Smerwick Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.25,
+          52.116666
+        ]
+      },
+      "properties": {
+        "Id": "0723",
+        "Name": "Dingle Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.9,
+          52.133333
+        ]
+      },
+      "properties": {
+        "Id": "0724",
+        "Name": "Cromane Point",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.3,
+          51.933333
+        ]
+      },
+      "properties": {
+        "Id": "0725",
+        "Name": "Knights Town",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.266666,
+          51.816666
+        ]
+      },
+      "properties": {
+        "Id": "0726",
+        "Name": "Ballinskelligs Bay Castle",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.05,
+          51.766666
+        ]
+      },
+      "properties": {
+        "Id": "0727",
+        "Name": "West Cove",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.65,
+          51.866666
+        ]
+      },
+      "properties": {
+        "Id": "0728",
+        "Name": "Dunkerron Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.95,
+          51.716666
+        ]
+      },
+      "properties": {
+        "Id": "0731",
+        "Name": "Ballycrovane Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -10.033333,
+          51.6
+        ]
+      },
+      "properties": {
+        "Id": "0732",
+        "Name": "Black Ball Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.9,
+          51.65
+        ]
+      },
+      "properties": {
+        "Id": "0733",
+        "Name": "CASTLETOWN BEARHAVEN",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.466666,
+          51.683333
+        ]
+      },
+      "properties": {
+        "Id": "0734",
+        "Name": "BANTRY",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.55,
+          51.616666
+        ]
+      },
+      "properties": {
+        "Id": "0736",
+        "Name": "Dunbeacon Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.666666,
+          51.533333
+        ]
+      },
+      "properties": {
+        "Id": "0737",
+        "Name": "Dunmanus Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.733333,
+          51.466666
+        ]
+      },
+      "properties": {
+        "Id": "0741",
+        "Name": "Crookhaven",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.533333,
+          51.516666
+        ]
+      },
+      "properties": {
+        "Id": "0742",
+        "Name": "Schull",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.366666,
+          51.483333
+        ]
+      },
+      "properties": {
+        "Id": "0743",
+        "Name": "Baltimore, Ireland",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.166666,
+          51.533333
+        ]
+      },
+      "properties": {
+        "Id": "0744",
+        "Name": "Castletownshend",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.833333,
+          51.583333
+        ]
+      },
+      "properties": {
+        "Id": "0745",
+        "Name": "Clonakilty Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.716666,
+          51.633333
+        ]
+      },
+      "properties": {
+        "Id": "0746",
+        "Name": "Courtmacsherry",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.516666,
+          51.7
+        ]
+      },
+      "properties": {
+        "Id": "0747",
+        "Name": "Kinsale",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.316666,
+          51.75
+        ]
+      },
+      "properties": {
+        "Id": "0748",
+        "Name": "Roberts Cove",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.3,
+          51.85
+        ]
+      },
+      "properties": {
+        "Id": "0750",
+        "Name": "COBH",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.316666,
+          51.833333
+        ]
+      },
+      "properties": {
+        "Id": "0751",
+        "Name": "Ringaskiddy",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.333333,
+          51.883333
+        ]
+      },
+      "properties": {
+        "Id": "0752",
+        "Name": "Marino Point",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.45,
+          51.9
+        ]
+      },
+      "properties": {
+        "Id": "0753",
+        "Name": "Cork City",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.016666,
+          51.833333
+        ]
+      },
+      "properties": {
+        "Id": "0754",
+        "Name": "Ballycotton",
+        "Country": "Ireland",
         "ContinuousHeightsAvailable": true
       }
     },
@@ -637,22 +1629,6 @@
       "properties": {
         "Id": "0026A",
         "Name": "Teignmouth (New Quay)",
-        "Country": "England",
-        "ContinuousHeightsAvailable": true
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -3.383333,
-          50.6
-        ]
-      },
-      "properties": {
-        "Id": "0026B",
-        "Name": "Exmouth (Approaches)",
         "Country": "England",
         "ContinuousHeightsAvailable": true
       }
@@ -8566,6 +9542,230 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -6.133333,
+          52.8
+        ]
+      },
+      "properties": {
+        "Id": "0611",
+        "Name": "ARKLOW",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.033333,
+          52.983333
+        ]
+      },
+      "properties": {
+        "Id": "0613",
+        "Name": "Wicklow",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.066666,
+          53.15
+        ]
+      },
+      "properties": {
+        "Id": "0614",
+        "Name": "Greystones",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.133333,
+          53.3
+        ]
+      },
+      "properties": {
+        "Id": "0615",
+        "Name": "DUN LAOGHAIRE",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.15,
+          53.35
+        ]
+      },
+      "properties": {
+        "Id": "0616",
+        "Name": "Dublin Bar",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.216666,
+          53.35
+        ]
+      },
+      "properties": {
+        "Id": "0617",
+        "Name": "DUBLIN (NORTH WALL)",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.066666,
+          53.383333
+        ]
+      },
+      "properties": {
+        "Id": "0618",
+        "Name": "Howth",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.15,
+          53.45
+        ]
+      },
+      "properties": {
+        "Id": "0621",
+        "Name": "Malahide",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.183333,
+          53.616666
+        ]
+      },
+      "properties": {
+        "Id": "0622",
+        "Name": "Balbriggan",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.233333,
+          53.716666
+        ]
+      },
+      "properties": {
+        "Id": "0623",
+        "Name": "River Boyne Entrance",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.233333,
+          53.866666
+        ]
+      },
+      "properties": {
+        "Id": "0624",
+        "Name": "Dunany Point",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.35,
+          54.0
+        ]
+      },
+      "properties": {
+        "Id": "0625",
+        "Name": "Soldiers Point",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.383333,
+          54.0
+        ]
+      },
+      "properties": {
+        "Id": "0625A",
+        "Name": "Dundalk",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.133333,
+          54.033333
+        ]
+      },
+      "properties": {
+        "Id": "0626",
+        "Name": "Greenore",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -6.066666,
           54.016666
         ]
@@ -8934,6 +10134,54 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -6.95,
+          55.216666
+        ]
+      },
+      "properties": {
+        "Id": "0654",
+        "Name": "Warren Lighthouse",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.05,
+          55.183333
+        ]
+      },
+      "properties": {
+        "Id": "0655",
+        "Name": "Moville",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.183333,
+          55.133333
+        ]
+      },
+      "properties": {
+        "Id": "0656",
+        "Name": "Quigley's Point",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -7.25,
           55.05
         ]
@@ -8982,14 +10230,398 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -5.0,
-          54.2
+          -7.15,
+          55.3
         ]
       },
       "properties": {
-        "Id": "T047A",
-        "Name": "54 12 N 05 00 W",
-        "Country": "Isle of Man",
+        "Id": "0660",
+        "Name": "Culdaff Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.233333,
+          55.433333
+        ]
+      },
+      "properties": {
+        "Id": "0661",
+        "Name": "Inishtrahull",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.333333,
+          55.366666
+        ]
+      },
+      "properties": {
+        "Id": "0662",
+        "Name": "Bulbinbeg",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.383333,
+          55.316666
+        ]
+      },
+      "properties": {
+        "Id": "0663",
+        "Name": "Trawbreaga Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.533333,
+          55.1
+        ]
+      },
+      "properties": {
+        "Id": "0664",
+        "Name": "Rathmullan",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.633333,
+          55.283333
+        ]
+      },
+      "properties": {
+        "Id": "0664A",
+        "Name": "Fanad Head",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.766666,
+          55.25
+        ]
+      },
+      "properties": {
+        "Id": "0665",
+        "Name": "Mulroy Bay Bar",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.816666,
+          55.2
+        ]
+      },
+      "properties": {
+        "Id": "0666",
+        "Name": "Fanny's Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.733333,
+          55.183333
+        ]
+      },
+      "properties": {
+        "Id": "0667",
+        "Name": "Seamount Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.7,
+          55.15
+        ]
+      },
+      "properties": {
+        "Id": "0668",
+        "Name": "Cranford Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.833333,
+          55.183333
+        ]
+      },
+      "properties": {
+        "Id": "0671",
+        "Name": "Downies Bay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.85,
+          51.95
+        ]
+      },
+      "properties": {
+        "Id": "0755",
+        "Name": "Youghal",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.566666,
+          52.083333
+        ]
+      },
+      "properties": {
+        "Id": "0756",
+        "Name": "Dungarvan Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.983333,
+          52.15
+        ]
+      },
+      "properties": {
+        "Id": "0761",
+        "Name": "Dunmore East",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.0,
+          52.266666
+        ]
+      },
+      "properties": {
+        "Id": "0761A",
+        "Name": "Cheekpoint",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.0,
+          52.283333
+        ]
+      },
+      "properties": {
+        "Id": "0761B",
+        "Name": "KILMOKEA POINT",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.1,
+          52.266666
+        ]
+      },
+      "properties": {
+        "Id": "0762",
+        "Name": "Waterford",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.95,
+          52.4
+        ]
+      },
+      "properties": {
+        "Id": "0763",
+        "Name": "New Ross",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.833333,
+          52.166666
+        ]
+      },
+      "properties": {
+        "Id": "0764",
+        "Name": "Baginbun Head",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.816666,
+          52.2
+        ]
+      },
+      "properties": {
+        "Id": "0764A",
+        "Name": "Fethard-On-Sea",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.616666,
+          52.116666
+        ]
+      },
+      "properties": {
+        "Id": "0765",
+        "Name": "Great Saltee",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.583333,
+          52.166666
+        ]
+      },
+      "properties": {
+        "Id": "0765A",
+        "Name": "Kilmore Quay",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.366666,
+          52.166666
+        ]
+      },
+      "properties": {
+        "Id": "0766",
+        "Name": "Carnsore Point",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.333333,
+          52.25
+        ]
+      },
+      "properties": {
+        "Id": "0767",
+        "Name": "ROSSLARE EUROPORT",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.45,
+          52.333333
+        ]
+      },
+      "properties": {
+        "Id": "0768",
+        "Name": "Wexford Harbour",
+        "Country": "Ireland",
         "ContinuousHeightsAvailable": true
       }
     },
