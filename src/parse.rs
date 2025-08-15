@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 // use chrono::{DateTime, NaiveDate, TimeZone, Utc};
-use serde::{self, de::Unexpected, Deserialize, Deserializer};
+use serde::{self, Deserialize, Deserializer, de::Unexpected};
 
 use crate::types::{Coordinates, LunarPhaseType, Station, StationId, TidalEventType};
 
@@ -17,26 +17,38 @@ use crate::types::{Coordinates, LunarPhaseType, Station, StationId, TidalEventTy
 ///
 /// This function will return an error if `serde_json` fails to deserialize the data as a `String`
 /// or if `chrono` fails to parse that `String` in `%Y-%m-%dT%H:%M:%S` format.
-pub(crate) fn deserialize_datetime_without_tz<'de, D>(deserializer: D) -> Result<jiff::Zoned, D::Error>
+pub(crate) fn deserialize_datetime_without_tz<'de, D>(
+    deserializer: D,
+) -> Result<jiff::Zoned, D::Error>
 where
     D: Deserializer<'de>,
 {
     const FORMAT: &str = "%Y-%m-%dT%H:%M:%S";
     let value = String::deserialize(deserializer)?;
+    // Split off any fractional seconds (".5").
     let date = value.split_once('.').map(|(d, _)| d).unwrap_or(&value);
+
+    // The datetime in the JSON is in "GMT" (UTC), so the civil datetime (without a TZ)
+    // first needs converting to UTC, then converting again to Europe/London to ensure
+    // summer time gets applied.
     jiff::civil::DateTime::strptime(FORMAT, date)
+        .and_then(|d| d.to_zoned(jiff::tz::TimeZone::UTC))
         .and_then(|d| d.in_tz("Europe/London"))
         .map_err(serde::de::Error::custom)
 }
 
-pub(crate) fn deserialize_date_without_tz<'de, D>(deserializer: D) -> Result<jiff::civil::Date, D::Error>
+pub(crate) fn deserialize_date_without_tz<'de, D>(
+    deserializer: D,
+) -> Result<jiff::civil::Date, D::Error>
 where
     D: Deserializer<'de>,
 {
     deserialize_datetime_without_tz(deserializer).map(|z| z.date())
 }
 
-pub(crate) fn deserialize_zulu_datetime_to_zoned<'de, D>(deserializer: D) -> Result<jiff::Zoned, D::Error>
+pub(crate) fn deserialize_zulu_datetime_to_zoned<'de, D>(
+    deserializer: D,
+) -> Result<jiff::Zoned, D::Error>
 where
     D: Deserializer<'de>,
 {
