@@ -95,7 +95,7 @@ pub enum StationDataSource {
 }
 
 /// A wrapper for all of the tide prediction data from the Admiralty API.
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TidePredictions {
     /// A note appended to the whole response.
@@ -112,6 +112,22 @@ pub struct TidePredictions {
     pub tidal_event_list: Vec<TidalEvent>,
     /// Half-hourly tide height predictions.
     pub tidal_height_occurrence_list: Vec<TidalHeightOccurence>,
+}
+
+// Custom Debug implementation to prevent the half-hourly tidal height predictions
+// being included.
+impl std::fmt::Debug for TidePredictions {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("TidePredictions")
+            .field("footer_note", &self.footer_note)
+            .field("lunar_phase_list", &self.lunar_phase_list)
+            .field("tidal_event_list", &self.tidal_event_list)
+            .field(
+                "tidal_height_occurrence_list",
+                &format!("[ {} heights ]", self.tidal_height_occurrence_list.len()),
+            )
+            .finish()
+    }
 }
 
 /// An instance of low or high tide.
