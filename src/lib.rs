@@ -31,29 +31,6 @@ pub fn tide_predictions_url(station: &StationId) -> Url {
 ///
 /// The data should be JSON sourced from the UKHO (semi-)public
 /// Home/GetPredictions endpoint.
-///
-/// # Errors
-///
-/// This function will return an error if it cannot parse the data
-/// from the reader as JSON or as JSON that encodes tide predictions.
-/// Currently the error will only be a `serde_json::Error` but is
-/// boxed to hide changes in the implementation in the future.
-///
-/// (`serde_json::Error` itself just contains a Boxed error, but this
-/// extra indirection isn't expected to cause performance problems as
-/// this function is effectively the "end of the line" for the error.)
-///
-/// # Examples
-/// ```
-/// use std::fs::File;
-/// use std::io::BufReader;
-///
-/// let file = File::open("./reference/tides.json")
-///     .expect("Failed to open tides reference file.");
-/// let bufreader = BufReader::new(file);
-/// let tides = rjw_uktides::tides_from_reader(bufreader)
-///     .expect("Failed to read file as tides data.");
-/// ```
 pub fn tides_from_reader(rdr: impl Read) -> Result<TidePredictions, Error> {
     serde_json::from_reader(rdr).map_err(Error::Parse)
 }
@@ -66,29 +43,6 @@ pub fn tides_from_reader(rdr: impl Read) -> Result<TidePredictions, Error> {
 ///
 /// The [`Station`] struct simplifies the nested structure of the
 /// JSON returned by the GetStations endpoint.
-///
-/// # Errors
-///
-/// This function will return an error if it cannot parse the data
-/// from the reader as JSON or as JSON that encodes station data.
-/// Currently the error will only be a `serde_json::Error` but is
-/// boxed to hide changes in the implementation in the future.
-///
-/// (`serde_json::Error` itself just contains a Boxed error, but this
-/// extra indirection isn't expected to cause performance problems as
-/// this function is effectively the "end of the line" for the error.)
-///
-/// # Examples
-/// ```
-/// use std::fs::File;
-/// use std::io::BufReader;
-///
-/// let file = File::open("./reference/stations.json")
-///     .expect("Failed to open stations reference file.");
-/// let bufreader = BufReader::new(file);
-/// let stations = rjw_uktides::stations_from_reader(bufreader)
-///     .expect("Failed to read file as stations data.");
-/// ```
 pub fn stations_from_reader(rdr: impl Read) -> Result<Vec<Station>, Error> {
     serde_json::from_reader(rdr)
         .map(|sd: crate::parse::StationsData| sd.features)
@@ -100,7 +54,7 @@ pub fn stations_from_reader(rdr: impl Read) -> Result<Vec<Station>, Error> {
 /// This is helpful to look up station information without making a network call,
 /// but may become out of date as the UKHO changes the available stations.
 ///
-/// This function parses the JSON embedded in the library, so it is not "free".
+/// Note that this function parses the JSON embedded in the library, so it is not free.
 pub fn cached_stations() -> Vec<Station> {
     stations_from_reader(STATIONS_JSON_CACHED)
         .expect("Embedded stations data must be verified as valid.")

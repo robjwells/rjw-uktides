@@ -17,9 +17,7 @@ use crate::types::{Coordinates, Country, LunarPhaseType, Station, StationId, Tid
 ///
 /// This function will return an error if `serde_json` fails to deserialize the data as a string
 /// or if `jiff` fails to parse that string in `%Y-%m-%dT%H:%M:%S` format.
-pub(crate) fn datetime_without_tz<'de, D>(
-    deserializer: D,
-) -> Result<jiff::Zoned, D::Error>
+pub(crate) fn datetime_without_tz<'de, D>(deserializer: D) -> Result<jiff::Zoned, D::Error>
 where
     D: Deserializer<'de>,
 {
@@ -40,9 +38,7 @@ where
 /// Parse an ISO 8601 datetime with a trailing Z.
 ///
 /// The tidal height occurrences (the continuous height predictions) use this format.
-pub(crate) fn zulu_datetime_to_zoned<'de, D>(
-    deserializer: D,
-) -> Result<jiff::Zoned, D::Error>
+pub(crate) fn zulu_datetime_to_zoned<'de, D>(deserializer: D) -> Result<jiff::Zoned, D::Error>
 where
     D: Deserializer<'de>,
 {
