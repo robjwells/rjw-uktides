@@ -5,17 +5,32 @@ pub struct DecimalDegrees(pub f64);
 
 impl std::fmt::Display for DecimalDegrees {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        // Width of 6 to encompass -1.000 and 50.000.
-        write!(f, "{: >6.3}", self.0)
+        let abs_degrees = self.0.abs();
+        let floor_abs_degrees = abs_degrees.floor();
+        let abs_fractional = abs_degrees - floor_abs_degrees;
+
+        let degrees = floor_abs_degrees;
+        let minutes = (60.0 * abs_fractional).floor();
+        let seconds = 3600.0 * abs_fractional - 60.0 * minutes;
+
+        write!(
+            f,
+            "{d}°{m:02}′{s:02}″",
+            d = degrees as u8,
+            m = minutes as u8,
+            s = seconds as u8
+        )
     }
 }
 
 /// Geographic coordinates (latitude and longitude) of the station.
 ///
-/// It is not clear which coordinate system these are from; perhaps WGS 84.
+/// It is not clear which coordinate system these are from.
+///
+/// **Note** that the order of the fields is important as this struct
+/// is represented by an array in the JSON, longitude first.
 #[derive(Debug, Copy, Clone, Deserialize)]
 pub struct Coordinates {
-    // Order is important here as this struct is represented by an array in the JSON.
     /// Longitude, in decimal degrees.
     pub longitude: DecimalDegrees,
     /// Latitude, in decimal degrees.
@@ -24,7 +39,14 @@ pub struct Coordinates {
 
 impl std::fmt::Display for Coordinates {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "[{}, {}]", self.longitude, self.latitude)
+        let lon_char = if self.longitude.0 >= 0.0 { 'E' } else { 'W' };
+        write!(
+            f,
+            "{lat}N {lon}{lc}",
+            lat = self.latitude,
+            lon = self.longitude,
+            lc = lon_char,
+        )
     }
 }
 
