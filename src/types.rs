@@ -5,7 +5,7 @@ use serde::Deserialize;
 /// The contained `f64` is the decimal representation, its `String` representation
 /// ([`Display`](std::fmt::Display)) is in sexagesimal (base-60) degrees, minutes and seconds
 /// according to Annex D of [ISO 6709](https://en.wikipedia.org/wiki/ISO_6709).
-#[derive(Debug, Copy, Clone, Deserialize)]
+#[derive(Debug, Copy, Clone, Deserialize, PartialEq)]
 pub struct DecimalDegrees(pub f64);
 
 impl std::fmt::Display for DecimalDegrees {
@@ -33,7 +33,7 @@ impl std::fmt::Display for DecimalDegrees {
 /// It is not clear which coordinate system these are from, even the UKHO API documentation lists
 /// it as "unspecified". Do not rely on the precision of the coordinates beyond specifying a
 /// general location.
-#[derive(Debug, Copy, Clone, Deserialize)]
+#[derive(Debug, Copy, Clone, Deserialize, PartialEq)]
 pub struct Coordinates {
     // NOTE that the order of the fields is important as this struct is represented by an array in
     // the JSON, longitude first.
@@ -82,7 +82,7 @@ impl std::fmt::Display for StationId {
 }
 
 /// Country in which a tidal station is located.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Country {
     ChannelIslands,
     England,
@@ -163,7 +163,7 @@ impl PartialOrd for Station {
 }
 
 /// Tide prediction and related data for a particular station.
-#[derive(Deserialize)]
+#[derive(Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct TidePredictions {
     /// A note appended to the whole response that is typically safety-related.
@@ -201,12 +201,12 @@ impl std::fmt::Debug for TidePredictions {
 }
 
 /// An instance of low or high tide.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct TidalEvent {
     /// The predicted datetime at which the tide will occur, in the Europe/London timezone.
     // TODO: UKHO says "this may be missing if it is invalid". When/where?
-    #[serde(deserialize_with = "crate::parse::datetime_without_tz")]
+    #[serde(deserialize_with = "crate::parse::deserialize_datetime_without_tz")]
     pub date_time: jiff::Zoned,
 
     /// Discriminator between high and low tide.
@@ -230,34 +230,20 @@ impl TidalEvent {
     }
 }
 
-impl PartialEq for TidalEvent {
-    fn eq(&self, other: &Self) -> bool {
-        self.date_time == other.date_time
-    }
-}
-
-impl Eq for TidalEvent {}
-
-impl Ord for TidalEvent {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.date_time.cmp(&other.date_time)
-    }
-}
-
 impl PartialOrd for TidalEvent {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some(self.cmp(other))
+        self.date_time.partial_cmp(&other.date_time)
     }
 }
 
 /// Predicted tide height in metres.
-#[derive(Debug, Clone, Copy, Deserialize)]
+#[derive(Debug, Clone, Copy, Deserialize, PartialEq)]
 pub struct Metres(pub f64);
 
 /// Represents either low or high tide.
 ///
 /// The u8 discriminants match the numbers used in the semi-public API.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 #[repr(u8)]
 pub enum TidalEventType {
     HighWater = 0,
@@ -275,22 +261,22 @@ impl std::fmt::Display for TidalEventType {
 }
 
 /// Half-hourly prediction of tide height.
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct TidalHeightOccurence {
     /// Time of predicted height, in the Europe/London timezone.
-    #[serde(deserialize_with = "crate::parse::zulu_datetime_to_zoned")]
+    #[serde(deserialize_with = "crate::parse::deserialize_zulu_datetime_to_zoned")]
     pub date_time: jiff::Zoned,
     /// Predicted tide height in metres.
     pub height: Metres,
 }
 
 /// Prediction of a particular lunar phase.
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct LunarPhase {
     /// Datetime of the lunar phase occurrence, in the Europe/London timezone.
-    #[serde(deserialize_with = "crate::parse::datetime_without_tz")]
+    #[serde(deserialize_with = "crate::parse::deserialize_datetime_without_tz")]
     pub date_time: jiff::Zoned,
 
     /// The lunar phase itself.
@@ -300,11 +286,26 @@ pub struct LunarPhase {
 /// Represents a particular phase of the moon.
 ///
 /// The u8 discriminants match the numbers used in the semi-public API.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 #[repr(u8)]
 pub enum LunarPhaseType {
     NewMoon = 1,
     FirstQuarter = 2,
     FullMoon = 3,
     LastQuarter = 4,
+}
+
+#[cfg(test)]
+mod test {
+    use super::{Coordinates, DecimalDegrees};
+
+    #[test]
+    fn coords_to_sexagesimal() {
+        let coords = Coordinates {
+            longitude: DecimalDegrees(-1.15),
+            latitude: DecimalDegrees(50.65),
+        };
+        let expected = "50°38′59″N 1°08′59″W".to_owned();
+        assert_eq!(coords.to_string(), expected);
+    }
 }

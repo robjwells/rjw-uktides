@@ -1,0 +1,37 @@
+{
+  "tidalEventList": [
+    {
+      "eventType": 0,
+      "dateTime": "2025-08-17T05:14:18.333",
+      "height": 3.5317316090102,
+      "isApproximateTime": null,
+      "isApproximateHeight": null,
+      "date": "2025-08-17T00:00:00"
+    },
+    {
+      "eventType": 1,
+      "dateTime": "2025-08-17T10:48:32.5",
+      "height": 1.5415957943340564,
+      "isApproximateTime": null,
+      "isApproximateHeight": null,
+      "date": "2025-08-17T00:00:00"
+    }
+  ],
+  "tidalHeightOccurrenceList": [
+    {
+      "dateTime": "2025-08-17T23:00:00Z",
+      "height": 1.657104
+    },
+    {
+      "dateTime": "2025-08-17T23:30:00Z",
+      "height": 1.599734
+    }
+  ],
+  "lunarPhaseList": [
+    {
+      "lunarPhaseType": 1,
+      "dateTime": "2025-08-23T06:06:00"
+    }
+  ],
+  "footerNote": "High waters - important note. The high water duration can occur over an extended time period, i.e. a \"high water stand\". The predictions give the time and height of high water corresponding to the highest point."
+}

@@ -1,0 +1,101 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.2,
+          49.716666
+        ]
+      },
+      "properties": {
+        "Id": "1603",
+        "Name": "BRAYE",
+        "Country": "Channel Islands",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.316666,
+          55.066666
+        ]
+      },
+      "properties": {
+        "Id": "0681",
+        "Name": "Gweedore Harbour",
+        "Country": "Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.416666,
+          51.333333
+        ]
+      },
+      "properties": {
+        "Id": "0102",
+        "Name": "RAMSGATE",
+        "Country": "England",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.05,
+          53.216666
+        ]
+      },
+      "properties": {
+        "Id": "0463",
+        "Name": "Connah's Quay",
+        "Country": "Wales",
+        "ContinuousHeightsAvailable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.066666,
+          54.016666
+        ]
+      },
+      "properties": {
+        "Id": "0627",
+        "Name": "Cranfield Point",
+        "Country": "Northern Ireland",
+        "ContinuousHeightsAvailable": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -3.166666,
+          58.633333
+        ]
+      },
+      "properties": {
+        "Id": "0297A",
+        "Name": "Gills Bay",
+        "Country": "Scotland",
+        "ContinuousHeightsAvailable": true
+      }
+    }
+  ]
+}
