@@ -76,6 +76,7 @@ struct Cli {
 #[derive(Subcommand, Clone, Debug)]
 enum Commands {
     ListStations(StationsArgs),
+    // TODO: Add subcommand to display single station info
 }
 
 /// List all UK tidal stations supported by the UKHO.

@@ -6,10 +6,11 @@ edition = "2024"
 description = "Rust bindings to the UK Hydrographic Office public EasyTide service."
 repository = "https://github.com/robjwells/rjw-uktides"
 license = "MIT"
+default-run = "tides"
 
 [[bin]]
 name = "tides"
-path = "src/main.rs"
+path = "src/bin/tides/mod.rs"
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }
