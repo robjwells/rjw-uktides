@@ -30,13 +30,13 @@ looking up tide predictions, and printing the times of high and low tides.
 ```rust
 // Fetch the list of all stations.
 let url = rjw_uktides::stations_list_url();
-let body = ureq::get(url.as_str()).call()?.into_body();
-let stations = Vec<Station> = rjw_uktides::stations_from_reader(body.into_reader())?;
+let body = ureq::get(url.as_str()).call()?.into_body().into_reader();
+let stations = Vec<Station> = rjw_uktides::stations_from_reader(body)?;
 
-// Fetch tide predictions for the first station (probably Braye Harbour on Alderney)
+// Fetch tide predictions for the first station
 let url = rjw_uktides::tide_predictions_url(&stations[0].id);
-let body = ureq::get(url.as_str()).call()?.into_body();
-let predictions: TidePredictions = rjw_uktides::tides_from_reader(body.into_reader())?;
+let body = ureq::get(url.as_str()).call()?.into_body().into_reader();
+let predictions: TidePredictions = rjw_uktides::tides_from_reader(body)?;
 
 // Print the times of the high and low tides
 for event in predictions.tidal_event_list {
@@ -51,7 +51,7 @@ and low tides. The following command is roughly equivalent to the predictions
 part of the code shown above.
 
 ```sh
-# Look up tide predictions for a known station ID, in this case Inverness in Scotland.
+# Look up tide predictions for a known station ID, in this case Inverness.
 # Note that station IDs are not numeric; leading zeroes are important.
 tides --station 0256
 ```
@@ -109,6 +109,6 @@ should enjoy being beside the water!
 ### Why is it called `rjw-uktides`?
 
 The library name contains `uk` because the information is provided by the UK
-Hydrographic Office, even though some of the tide stations are other countries.
-It is not a comment about whether those countries should be part of the
-political entity that is the UK.
+Hydrographic Office, even though some of the tide stations are in other
+countries. It is not a comment about whether those countries should be part of
+the political entity that is the UK.
