@@ -14,11 +14,6 @@ const STATIONS_JSON_CACHED: &[u8] = include_bytes!("../stations.json");
 const STATIONS_URL: &str = "https://easytide.admiralty.co.uk/Home/GetStations";
 const TIDES_URL: &str = "https://easytide.admiralty.co.uk/Home/GetPredictionData";
 
-pub fn cached_stations() -> Vec<Station> {
-    stations_from_reader(STATIONS_JSON_CACHED)
-        .expect("Embedded stations data must be verified as valid.")
-}
-
 /// Get the URL for information on all available stations.
 pub fn stations_list_url() -> Url {
     STATIONS_URL
@@ -98,4 +93,15 @@ pub fn stations_from_reader(rdr: impl Read) -> Result<Vec<Station>, Error> {
     serde_json::from_reader(rdr)
         .map(|sd: crate::parse::StationsData| sd.features)
         .map_err(Error::Parse)
+}
+
+/// Get the station information valid at the time rjw_uktides was released.
+///
+/// This is helpful to look up station information without making a network call,
+/// but may become out of date as the UKHO changes the available stations.
+///
+/// This function parses the JSON embedded in the library, so it is not "free".
+pub fn cached_stations() -> Vec<Station> {
+    stations_from_reader(STATIONS_JSON_CACHED)
+        .expect("Embedded stations data must be verified as valid.")
 }
