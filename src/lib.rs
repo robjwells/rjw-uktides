@@ -1,3 +1,4 @@
+mod error;
 mod parse;
 mod types;
 
@@ -5,26 +6,13 @@ use std::io::Read;
 
 use url::Url;
 
+pub use crate::error::Error;
 pub use crate::types::{Station, StationDataSource, StationId, TidePredictions};
 
 const STATIONS_JSON_CACHED: &[u8] = include_bytes!("../stations.json");
 
 const STATIONS_URL: &str = "https://easytide.admiralty.co.uk/Home/GetStations";
 const TIDES_URL: &str = "https://easytide.admiralty.co.uk/Home/GetPredictionData";
-
-#[derive(Debug)]
-pub enum Error {
-    Parse(serde_json::Error),
-}
-
-impl std::fmt::Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        // TODO: This is a dummy implementation
-        write!(f, "{self:?}")
-    }
-}
-
-impl core::error::Error for Error {}
 
 pub fn cached_stations() -> Vec<Station> {
     stations_from_reader(STATIONS_JSON_CACHED)
