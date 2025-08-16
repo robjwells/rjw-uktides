@@ -17,7 +17,7 @@ use crate::types::{Coordinates, Country, LunarPhaseType, Station, StationId, Tid
 ///
 /// This function will return an error if `serde_json` fails to deserialize the data as a string
 /// or if `jiff` fails to parse that string in `%Y-%m-%dT%H:%M:%S` format.
-pub(crate) fn deserialize_datetime_without_tz<'de, D>(
+pub(crate) fn datetime_without_tz<'de, D>(
     deserializer: D,
 ) -> Result<jiff::Zoned, D::Error>
 where
@@ -40,7 +40,7 @@ where
 /// Parse an ISO 8601 datetime with a trailing Z.
 ///
 /// The tidal height occurrences (the continuous height predictions) use this format.
-pub(crate) fn deserialize_zulu_datetime_to_zoned<'de, D>(
+pub(crate) fn zulu_datetime_to_zoned<'de, D>(
     deserializer: D,
 ) -> Result<jiff::Zoned, D::Error>
 where
@@ -63,7 +63,7 @@ where
 /// This function will return an error if `serde_json` fails to parse the JSON into the format
 /// expected from the UKHO API. The conversion from the (internal) `StationFeature` structs
 /// into `Station` structs will not fail.
-fn deserialize_stations<'de, D>(deserializer: D) -> Result<Vec<Station>, D::Error>
+fn stations<'de, D>(deserializer: D) -> Result<Vec<Station>, D::Error>
 where
     D: Deserializer<'de>,
 {
@@ -95,7 +95,7 @@ pub(crate) struct StationsData {
     #[serde(skip, rename = "type")]
     _type: String,
 
-    #[serde(deserialize_with = "crate::parse::deserialize_stations")]
+    #[serde(deserialize_with = "crate::parse::stations")]
     pub(crate) features: Vec<Station>,
 }
 

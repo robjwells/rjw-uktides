@@ -181,7 +181,7 @@ impl std::fmt::Debug for TidePredictions {
 #[serde(rename_all = "camelCase")]
 pub struct TidalEvent {
     /// The predicted datetime at which the tide measurement will occur.
-    #[serde(deserialize_with = "crate::parse::deserialize_datetime_without_tz")]
+    #[serde(deserialize_with = "crate::parse::datetime_without_tz")]
     pub date_time: jiff::Zoned,
 
     /// Discriminator between high and low tide.
@@ -251,7 +251,7 @@ impl std::fmt::Display for TidalEventType {
 #[serde(rename_all = "camelCase")]
 pub struct TidalHeightOccurence {
     /// Time of prediction, typically every half-hour.
-    #[serde(deserialize_with = "crate::parse::deserialize_zulu_datetime_to_zoned")]
+    #[serde(deserialize_with = "crate::parse::zulu_datetime_to_zoned")]
     pub date_time: jiff::Zoned,
     /// Predicted tide height as a newtype-wrapped `f64`.
     pub height: Metres,
@@ -262,7 +262,7 @@ pub struct TidalHeightOccurence {
 #[serde(rename_all = "camelCase")]
 pub struct LunarPhase {
     /// Datetime of the lunar phase occurrence.
-    #[serde(deserialize_with = "crate::parse::deserialize_datetime_without_tz")]
+    #[serde(deserialize_with = "crate::parse::datetime_without_tz")]
     pub date_time: jiff::Zoned,
 
     /// The lunar phase itself.
