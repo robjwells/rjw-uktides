@@ -24,7 +24,7 @@ impl std::fmt::Display for Error {
     }
 }
 
-impl std::error::Error for Error {}
+impl core::error::Error for Error {}
 
 pub fn cached_stations() -> Vec<Station> {
     stations_from_reader(STATIONS_JSON_CACHED)
