@@ -156,12 +156,6 @@ impl PartialOrd for Station {
     }
 }
 
-#[derive(Debug)]
-pub enum StationDataSource {
-    Cached,
-    FetchLatest,
-}
-
 /// A wrapper for all of the tide prediction data from the UKHO API.
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]

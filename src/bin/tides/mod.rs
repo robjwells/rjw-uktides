@@ -13,13 +13,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         subcommand,
     } = Cli::parse();
     match (tides_args, subcommand) {
-        (None, Some(Commands::ListStations(StationsArgs { fetch }))) => {
-            let stations = if fetch {
-                fetch::fetch_stations()?
-            } else {
-                rjw_uktides::cached_stations()
-            };
-            display_stations(stations);
+        (None, Some(Commands::ListStations)) => {
+            display_stations(fetch::fetch_stations()?);
         }
         (Some(tides_args), None) => {
             let tides = fetch::fetch_tides(&tides_args.station);
@@ -82,18 +77,8 @@ struct Cli {
 
 #[derive(Subcommand, Clone, Debug)]
 enum Commands {
-    ListStations(StationsArgs),
+    ListStations,
     // TODO: Add subcommand to display single station info
-}
-
-/// List all UK tidal stations supported by the UKHO.
-#[derive(Args, Clone, Debug)]
-struct StationsArgs {
-    /// Fetch the current list of tidal stations from the UKHO web service.
-    ///
-    /// If this argument is omitted, stations data built into the binary will be used.
-    #[arg(short, long)]
-    fetch: bool,
 }
 
 /// Display tide information for one station on a particular day.

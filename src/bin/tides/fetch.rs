@@ -1,8 +1,8 @@
 use crate::error::TidesError;
 
 use rjw_uktides::{
-    Station, StationDataSource, StationId, TidePredictions, stations_from_reader,
-    stations_list_url, tide_predictions_url, tides_from_reader,
+    Station, StationId, TidePredictions, stations_from_reader, stations_list_url,
+    tide_predictions_url, tides_from_reader,
 };
 
 pub fn fetch_stations<'a>() -> Result<Vec<Station>, TidesError<'a>> {
@@ -22,16 +22,9 @@ pub fn fetch_tides(station: &StationId) -> Result<TidePredictions, TidesError<'s
 }
 
 #[allow(dead_code)]
-pub fn station_details(
-    id: &StationId,
-    source: StationDataSource,
-) -> Result<Station, TidesError<'_>> {
-    use StationDataSource::*;
-    match source {
-        Cached => rjw_uktides::cached_stations(),
-        FetchLatest => fetch_stations()?,
-    }
-    .into_iter()
-    .find(|s| &s.id == id)
-    .ok_or_else(|| TidesError::NoSuchStation(id))
+pub fn station_details(id: &StationId) -> Result<Station, TidesError<'_>> {
+    fetch_stations()?
+        .into_iter()
+        .find(|s| &s.id == id)
+        .ok_or_else(|| TidesError::NoSuchStation(id))
 }
