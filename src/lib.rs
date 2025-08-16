@@ -7,29 +7,27 @@ use url::Url;
 
 pub use crate::types::{Station, StationDataSource, StationId, TidePredictions};
 
-const STATIONS_BAKED_BYTES: &[u8] = include_bytes!("../stations.json");
+const STATIONS_JSON_CACHED: &[u8] = include_bytes!("../stations.json");
 
 const STATIONS_URL: &str = "https://easytide.admiralty.co.uk/Home/GetStations";
 const TIDES_URL: &str = "https://easytide.admiralty.co.uk/Home/GetPredictionData";
 
 #[derive(Debug)]
-pub enum Error<'a> {
-    ParseError(serde_json::Error),
-    FetchError(ureq::Error),
-    NoSuchStation(&'a StationId),
+pub enum Error {
+    Parse(serde_json::Error),
 }
 
-impl std::fmt::Display for Error<'_> {
+impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // TODO: This is a dummy implementation
         write!(f, "{self:?}")
     }
 }
 
-impl std::error::Error for Error<'_> {}
+impl std::error::Error for Error {}
 
 pub fn cached_stations() -> Vec<Station> {
-    stations_from_reader(STATIONS_BAKED_BYTES)
+    stations_from_reader(STATIONS_JSON_CACHED)
         .expect("Embedded stations data must be verified as valid.")
 }
 
@@ -73,8 +71,8 @@ pub fn tide_predictions_url(station: &StationId) -> Url {
 /// let tides = rjw_uktides::tides_from_reader(bufreader)
 ///     .expect("Failed to read file as tides data.");
 /// ```
-pub fn tides_from_reader<'a>(rdr: impl Read) -> Result<TidePredictions, Error<'a>> {
-    serde_json::from_reader(rdr).map_err(Error::ParseError)
+pub fn tides_from_reader(rdr: impl Read) -> Result<TidePredictions, Error> {
+    serde_json::from_reader(rdr).map_err(Error::Parse)
 }
 
 /// Attempt to extract tide station information from the reader.
@@ -108,8 +106,8 @@ pub fn tides_from_reader<'a>(rdr: impl Read) -> Result<TidePredictions, Error<'a
 /// let stations = rjw_uktides::stations_from_reader(bufreader)
 ///     .expect("Failed to read file as stations data.");
 /// ```
-pub fn stations_from_reader<'a>(rdr: impl Read) -> Result<Vec<Station>, Error<'a>> {
+pub fn stations_from_reader(rdr: impl Read) -> Result<Vec<Station>, Error> {
     serde_json::from_reader(rdr)
         .map(|sd: crate::parse::StationsData| sd.features)
-        .map_err(Error::ParseError)
+        .map_err(Error::Parse)
 }

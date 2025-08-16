@@ -1,10 +1,11 @@
+mod error;
+mod fetch;
+
 use std::error::Error;
 
 use clap::{Args, Parser, Subcommand};
 
 pub use rjw_uktides::{Station, StationId};
-
-mod fetch;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let Cli {
@@ -51,7 +52,13 @@ fn display_stations(mut s: Vec<Station>) {
         continuous_heights_available,
     } in s
     {
-        print!("{:5}\t{:<34}\t{:16}\t{}", id, name, country.to_string(), location);
+        print!(
+            "{:5}\t{:<34}\t{:16}\t{}",
+            id,
+            name,
+            country.to_string(),
+            location
+        );
         if !continuous_heights_available {
             print!("\tno continuous heights")
         }
