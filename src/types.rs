@@ -140,7 +140,7 @@ pub enum StationDataSource {
     FetchLatest,
 }
 
-/// A wrapper for all of the tide prediction data from the Admiralty API.
+/// A wrapper for all of the tide prediction data from the UKHO API.
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TidePredictions {
@@ -229,7 +229,7 @@ pub struct Metres(pub f64);
 
 /// Represents either low or high tide.
 ///
-/// The Admiralty API response encodes low tide as 1 and high tide as 0.
+/// The UKHO API response encodes low tide as 1 and high tide as 0.
 #[derive(Debug, Copy, Clone)]
 pub enum TidalEventType {
     HighWater,

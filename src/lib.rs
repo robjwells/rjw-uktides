@@ -29,7 +29,7 @@ pub fn tide_predictions_url(station: &StationId) -> Url {
 
 /// Attempt to parse data from the reader as tide predictions.
 ///
-/// The data should be JSON sourced from the Admiralty (semi-)public
+/// The data should be JSON sourced from the UKHO (semi-)public
 /// Home/GetPredictions endpoint.
 ///
 /// # Errors
@@ -60,7 +60,7 @@ pub fn tides_from_reader(rdr: impl Read) -> Result<TidePredictions, Error> {
 
 /// Attempt to extract tide station information from the reader.
 ///
-/// The data should be JSON sourced from the Admiralty (semi-)public
+/// The data should be JSON sourced from the UKHO (semi-)public
 /// Home/GetStations endpoint. The "features" property of the returned
 /// JSON is returned as a `Vec` of `Station`.
 ///

@@ -6,10 +6,10 @@ use crate::types::{Coordinates, Country, LunarPhaseType, Station, StationId, Tid
 
 /// Parse ISO 8601 datetimes missing a timezone and with optional fractional seconds.
 ///
-/// The Admiralty tides API returns dates as datetimes without a timezone specifier, and returns
+/// The UKHO tides API returns dates as datetimes without a timezone specifier, and returns
 /// some datetimes with a half-second appended (`.5`) and also without a datetime.
 ///
-/// The API documentation on the Admirality website describes these dates and datetimes as being in
+/// The API documentation on the UKHO website describes these dates and datetimes as being in
 /// GMT, so they are parsed initially as "naive" datetimes, then given the UTC timezone, then
 /// finally converted from UTC to the Europe/London timezone
 ///
@@ -54,14 +54,14 @@ where
 
 /// Deserialize the "features" object of the GetStations endpoint result as `Station` structs.
 ///
-/// The Admiralty public stations API contains unnecessary keys and unnecessarily nested data
+/// The UKHO public stations API contains unnecessary keys and unnecessarily nested data
 /// (it appears to be from a GIS system). This parses the "features" object instead into a
 /// `Vec` of [`Station`] structs which are simpler.
 ///
 /// # Errors
 ///
 /// This function will return an error if `serde_json` fails to parse the JSON into the format
-/// expected from the Admiralty API. The conversion from the (internal) `StationFeature` structs
+/// expected from the UKHO API. The conversion from the (internal) `StationFeature` structs
 /// into `Station` structs will not fail.
 fn deserialize_stations<'de, D>(deserializer: D) -> Result<Vec<Station>, D::Error>
 where
@@ -81,7 +81,7 @@ where
     Ok(stations)
 }
 
-/// Description of the Admirality stations API response wrapper.
+/// Description of the UKHO stations API response wrapper.
 ///
 /// The `type` field of the JSON response is always "FeatureCollection",
 /// as it appears to come directly from a GIS system.
@@ -99,7 +99,7 @@ pub(crate) struct StationsData {
     pub(crate) features: Vec<Station>,
 }
 
-/// Station information as returned by the Admiralty API.
+/// Station information as returned by the UKHO API.
 ///
 /// Not publicly exposed due to the redundant "type" key and the extra nesting.
 #[derive(Debug, Deserialize)]
