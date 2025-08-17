@@ -7,7 +7,10 @@ use std::io::Read;
 use url::Url;
 
 pub use crate::error::Error;
-pub use crate::types::{Station, StationId, TidePredictions};
+pub use crate::types::{
+    Coordinates, Country, DecimalDegrees, LunarPhase, LunarPhaseType, Metres, Station, StationId,
+    TidalEvent, TidalEventType, TidalHeightOccurence, TidePredictions,
+};
 
 const STATIONS_URL: &str = "https://easytide.admiralty.co.uk/Home/GetStations";
 const TIDES_URL: &str = "https://easytide.admiralty.co.uk/Home/GetPredictionData";
