@@ -6,17 +6,18 @@ use crate::types::{Coordinates, Country, LunarPhaseType, Station, StationId, Tid
 
 /// Parse ISO 8601 datetimes missing a timezone and with optional fractional seconds.
 ///
-/// The UKHO tides API returns dates as datetimes without a timezone specifier, and returns
-/// some datetimes with a half-second appended (`.5`) and also without a datetime.
+/// The UKHO tides API returns dates as datetimes without a timezone specifier, and returns some
+/// datetimes with a half-second appended (`.5`) and also without a datetime.
 ///
-/// The API documentation on the UKHO website describes these dates and datetimes as being in
-/// GMT, so they are parsed initially as "naive" datetimes, then given the UTC timezone, then
-/// finally converted from UTC to the Europe/London timezone
+/// The API documentation on the UKHO website describes these dates and datetimes as being in GMT,
+/// so they are parsed initially as "naive" datetimes, then given the UTC timezone, then finally
+/// converted from UTC to the Europe/London timezone. This ensures any summer time offset is
+/// applied correctly.
 ///
 /// # Errors
 ///
-/// This function will return an error if `serde_json` fails to deserialize the data as a string
-/// or if `jiff` fails to parse that string in `%Y-%m-%dT%H:%M:%S` format.
+/// This function will return an error if we cannot deserialise a string, or parse that
+/// (slightly cleaned-up) as a datetime.
 pub(crate) fn datetime_without_tz<'de, D>(deserializer: D) -> Result<jiff::Zoned, D::Error>
 where
     D: Deserializer<'de>,
@@ -50,15 +51,15 @@ where
 
 /// Deserialize the "features" object of the GetStations endpoint result as `Station` structs.
 ///
-/// The UKHO public stations API contains unnecessary keys and unnecessarily nested data
-/// (it appears to be from a GIS system). This parses the "features" object instead into a
-/// `Vec` of [`Station`] structs which are simpler.
+/// The UKHO stations API contains unnecessary keys and unnecessarily nested data (it appears to be
+/// GeoJSON from a GIS system). This parses the "features" object instead into a `Vec` of simpler
+/// [`Station`] structs.
 ///
 /// # Errors
 ///
 /// This function will return an error if `serde_json` fails to parse the JSON into the format
 /// expected from the UKHO API. The conversion from the (internal) `StationFeature` structs
-/// into `Station` structs will not fail.
+/// into `Station` structs is infallible.
 fn stations<'de, D>(deserializer: D) -> Result<Vec<Station>, D::Error>
 where
     D: Deserializer<'de>,
@@ -79,12 +80,11 @@ where
 
 /// Description of the UKHO stations API response wrapper.
 ///
-/// The `type` field of the JSON response is always "FeatureCollection",
-/// as it appears to come directly from a GIS system.
+/// The `type` field of the JSON response is always "FeatureCollection", as it appears to come
+/// directly from a GIS system.
 ///
-/// This is a level of nesting that is not necessary for users of this
-/// crate, and so is just an intermediate representation from which
-/// the (custom-deserialized) `Station` structs are pulled.
+/// This is a level of nesting that is not necessary for users of this crate, and so is just an
+/// intermediate representation from which the (custom-deserialized) `Station` structs are pulled.
 #[derive(Debug, Deserialize)]
 pub(crate) struct StationsData {
     // Always 'FeatureCollection'
@@ -126,6 +126,7 @@ struct StationFeatureProperties {
     continuous_heights_available: bool,
 }
 
+// Deserialise country names into the `Country` enum via `FromStr`.
 impl<'de> Deserialize<'de> for Country {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -137,6 +138,7 @@ impl<'de> Deserialize<'de> for Country {
     }
 }
 
+// Deserialise the tidal event event type from its numeric representation.
 impl<'de> Deserialize<'de> for TidalEventType {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -155,6 +157,7 @@ impl<'de> Deserialize<'de> for TidalEventType {
     }
 }
 
+// Deserialise the lunar phase type from its numeric representation.
 impl<'de> Deserialize<'de> for LunarPhaseType {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where

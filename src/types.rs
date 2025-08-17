@@ -1,5 +1,10 @@
 use serde::Deserialize;
 
+/// Geographic coordinate represented as decimal degrees.
+///
+/// The contained `f64` is the decimal representation, its `String` representation
+/// ([`Display`](std::fmt::Display)) is in sexagesimal (base-60) degrees, minutes and seconds
+/// according to Annex D of [ISO 6709](https://en.wikipedia.org/wiki/ISO_6709).
 #[derive(Debug, Copy, Clone, Deserialize)]
 pub struct DecimalDegrees(pub f64);
 
@@ -23,14 +28,15 @@ impl std::fmt::Display for DecimalDegrees {
     }
 }
 
-/// Geographic coordinates (latitude and longitude) of the station.
+/// Latitude and longitude of a tidal station.
 ///
-/// It is not clear which coordinate system these are from.
-///
-/// **Note** that the order of the fields is important as this struct
-/// is represented by an array in the JSON, longitude first.
+/// It is not clear which coordinate system these are from, even the UKHO API documentation lists
+/// it as "unspecified". Do not rely on the precision of the coordinates beyond specifying a
+/// general location.
 #[derive(Debug, Copy, Clone, Deserialize)]
 pub struct Coordinates {
+    // NOTE that the order of the fields is important as this struct is represented by an array in
+    // the JSON, longitude first.
     /// Longitude, in decimal degrees.
     pub longitude: DecimalDegrees,
     /// Latitude, in decimal degrees.
@@ -50,6 +56,10 @@ impl std::fmt::Display for Coordinates {
     }
 }
 
+/// Unique identifier for a tidal station used to look up tide predictions.
+///
+/// While most station IDs appear to be numeric (eg 0053 for Sandown), they are not as leading
+/// zeroes are significant and some stations have a letter suffix.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
 pub struct StationId(pub String);
 
@@ -73,6 +83,7 @@ impl std::fmt::Display for StationId {
     }
 }
 
+/// Country in which a tidal station is located.
 #[derive(Debug, Clone, Copy)]
 pub enum Country {
     ChannelIslands,
@@ -116,23 +127,20 @@ impl std::fmt::Display for Country {
     }
 }
 
-/// Details of a specific tidal measurement station.
+/// Details of a specific tidal station.
 #[derive(Debug, Clone)]
 pub struct Station {
     /// ID used to identify the station when requesting tidal predictions.
-    ///
-    /// The ID appears numeric but leading zeroes are required when making the tidal prediction
-    /// request, hence it is deserialized as a newtype-wrapped `String`.
     pub id: StationId,
     /// The name of the location of the station.
     pub name: String,
-    /// The country in which the station is placed.
+    /// The country in which the station is located.
     pub country: Country,
     /// Geographic coordinates (latitude and longitude) of the station.
-    ///
-    /// It is not clear which coordinate system these are from; perhaps WGS 84.
     pub location: Coordinates,
-    /// Whether the station can provide continuous height measurements.
+    /// Whether the station can provide continuous height predictions.
+    ///
+    /// These predictions are in metres every 30 minutes.
     pub continuous_heights_available: bool,
 }
 
@@ -156,28 +164,30 @@ impl PartialOrd for Station {
     }
 }
 
-/// A wrapper for all of the tide prediction data from the UKHO API.
+/// Tide prediction and related data for a particular station.
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TidePredictions {
-    /// A note appended to the whole response.
-    ///
-    /// This is usually a warning that the "high water duration period can occur over an extended
-    /// time period."
+    /// A note appended to the whole response that is typically safety-related.
     pub footer_note: String,
     /// Moon phase data.
     pub lunar_phase_list: Vec<LunarPhase>,
     /// Low- and high-tide event data.
     ///
-    /// These include alternating low and high tides, their predicted height and when they will
-    /// occur.
+    /// Typically these alternate between low and high tides, but note that in some
+    /// locations [double tides] can occur.
+    ///
+    /// [double tides]: https://easytide.admiralty.co.uk/FAQs#:~:text=Double%20High%20Water
     pub tidal_event_list: Vec<TidalEvent>,
     /// Half-hourly tide height predictions.
+    ///
+    /// Note that not all stations provide these "continuous" heights, in which case this will be
+    /// empty.
     pub tidal_height_occurrence_list: Vec<TidalHeightOccurence>,
 }
 
 // Custom Debug implementation to prevent the half-hourly tidal height predictions
-// being included.
+// being included, which make the debug output *very* long.
 impl std::fmt::Debug for TidePredictions {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("TidePredictions")
@@ -196,14 +206,16 @@ impl std::fmt::Debug for TidePredictions {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TidalEvent {
-    /// The predicted datetime at which the tide measurement will occur.
+    /// The predicted datetime at which the tide will occur, in the Europe/London timezone.
+    // TODO: UKHO says "this may be missing if it is invalid". When/where?
     #[serde(deserialize_with = "crate::parse::datetime_without_tz")]
     pub date_time: jiff::Zoned,
 
     /// Discriminator between high and low tide.
     pub event_type: TidalEventType,
 
-    /// Predicted tide height as a newtype-wrapped `f64`.
+    /// Predicted tide height in metres.
+    // TODO: UKHO says "this may be missing if it is invalid". When/where?
     pub height: Metres,
 
     /// Typically `null` in the (semi-)public API response.
@@ -214,6 +226,7 @@ pub struct TidalEvent {
 }
 
 impl TidalEvent {
+    /// The date on which the tide will occur, in the Europe/London timezone.
     pub fn date(&self) -> jiff::civil::Date {
         self.date_time.date()
     }
@@ -239,17 +252,18 @@ impl PartialOrd for TidalEvent {
     }
 }
 
-/// Tide height in metres as an `f64`, wrapped in a newtype to make the measurement unit clear.
+/// Predicted tide height in metres.
 #[derive(Debug, Clone, Copy, Deserialize)]
 pub struct Metres(pub f64);
 
 /// Represents either low or high tide.
 ///
-/// The UKHO API response encodes low tide as 1 and high tide as 0.
+/// The u8 discriminants match the numbers used in the semi-public API.
 #[derive(Debug, Copy, Clone)]
+#[repr(u8)]
 pub enum TidalEventType {
-    HighWater,
-    LowWater,
+    HighWater = 0,
+    LowWater = 1,
 }
 
 impl std::fmt::Display for TidalEventType {
@@ -262,14 +276,14 @@ impl std::fmt::Display for TidalEventType {
     }
 }
 
-/// Prediction of the tide height in metres at a particular time.
+/// Half-hourly prediction of tide height.
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TidalHeightOccurence {
-    /// Time of prediction, typically every half-hour.
+    /// Time of predicted height, in the Europe/London timezone.
     #[serde(deserialize_with = "crate::parse::zulu_datetime_to_zoned")]
     pub date_time: jiff::Zoned,
-    /// Predicted tide height as a newtype-wrapped `f64`.
+    /// Predicted tide height in metres.
     pub height: Metres,
 }
 
@@ -277,7 +291,7 @@ pub struct TidalHeightOccurence {
 #[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct LunarPhase {
-    /// Datetime of the lunar phase occurrence.
+    /// Datetime of the lunar phase occurrence, in the Europe/London timezone.
     #[serde(deserialize_with = "crate::parse::datetime_without_tz")]
     pub date_time: jiff::Zoned,
 
