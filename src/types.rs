@@ -69,11 +69,9 @@ impl From<String> for StationId {
     }
 }
 
-impl std::str::FromStr for StationId {
-    type Err = ();
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(Self(s.to_owned()))
+impl From<&str> for StationId {
+    fn from(value: &str) -> Self {
+        Self(value.to_owned())
     }
 }
 
