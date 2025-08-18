@@ -7,32 +7,45 @@ use clap::{Args, Parser, Subcommand};
 
 pub use rjw_uktides::{Station, StationId};
 
+use crate::fetch::{fetch_station_details, fetch_stations, fetch_stations_json, fetch_tides};
+
 fn main() -> Result<(), Box<dyn Error>> {
-    let Cli {
-        tides_args,
-        subcommand,
-    } = Cli::parse();
-    match (tides_args, subcommand) {
-        (None, Some(Commands::ListStations)) => {
-            display_stations(fetch::fetch_stations()?);
+    match Cli::parse() {
+        Cli {
+            subcommand: Some(Commands::List { json: true }),
+            tides_args: None,
+        } => {
+            let mut json_reader = fetch_stations_json()?;
+            std::io::copy(&mut json_reader, &mut std::io::stdout())?;
+            // Ensure final newline to not mess-up terminals.
+            println!();
         }
-        (Some(tides_args), None) => {
-            let tides = fetch::fetch_tides(&tides_args.station);
-            match tides {
-                Ok(tides) => {
-                    for tide in tides.tidal_event_list {
-                        println!("{:?},{}", tide.date_time, tide.event_type);
-                    }
-                }
-                Err(e) => {
-                    eprintln!("Got error: {e:?}\n\n");
-                }
+        Cli {
+            subcommand: Some(Commands::List { json: false }),
+            tides_args: None,
+        } => {
+            display_stations(fetch_stations()?);
+        }
+        Cli {
+            subcommand: Some(Commands::Details { station_id }),
+            tides_args: None,
+        } => {
+            println!("{:#?}", fetch_station_details(station_id)?);
+        }
+        Cli {
+            subcommand: None,
+            tides_args: Some(TidesArgs { station_id, format }),
+        } => {
+            let tides = fetch_tides(&station_id)?;
+            for tide in tides.tidal_event_list {
+                println!(
+                    "{}    {}",
+                    tide.date_time.strftime(&format),
+                    tide.event_type
+                );
             }
         }
-        misc => {
-            eprintln!("Unexpected argument state:\n{:#?}", misc);
-            return Err("Unexpected argument state.".to_owned().into());
-        }
+        args @ Cli { .. } => unreachable!("{args:#?}"),
     }
     Ok(())
 }
@@ -68,6 +81,7 @@ fn display_stations(mut s: Vec<Station>) {
 #[derive(Parser, Debug)]
 #[command(args_conflicts_with_subcommands = true)]
 struct Cli {
+    // This extra wrapper seems necessary to get the arg/command conflict behaviour.
     #[command(flatten)]
     tides_args: Option<TidesArgs>,
 
@@ -77,14 +91,28 @@ struct Cli {
 
 #[derive(Subcommand, Clone, Debug)]
 enum Commands {
-    ListStations,
-    // TODO: Add subcommand to display single station info
+    /// List the details of all available tide stations.
+    ///
+    /// By default this displays stations in a text format.
+    List {
+        /// Print the JSON data received from EasyTide.
+        #[arg(short, long, default_value = "false")]
+        json: bool,
+    },
+    /// Show the details of one station.
+    Details {
+        /// ID of the desired tidal station.
+        station_id: StationId,
+    },
 }
 
 /// Display tide information for one station on a particular day.
 #[derive(Args, Clone, Debug)]
 struct TidesArgs {
     /// ID of the desired tidal station.
-    #[arg(short, long)]
-    station: StationId,
+    #[arg(short, long, value_name = "STATION_ID")]
+    station_id: StationId,
+    /// strftime format string to use for tidal event datetimes
+    #[arg(short, long, default_value = "%Y-%m-%d %H:%M %Z")]
+    format: String,
 }
