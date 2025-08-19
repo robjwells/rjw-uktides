@@ -1,3 +1,7 @@
+## Unreleased
+
+- Dual-license under Apache-2.0, add license files
+
 ## 0.6.0 - 2025-08-19
 
 - **lib**: Switch from `chrono` to `jiff` for datetime types

@@ -5,7 +5,7 @@ authors = ["Rob Wells <rob@robjwells.com>"]
 edition = "2024"
 description = "Rust bindings to the UK Hydrographic Office public EasyTide service."
 repository = "https://github.com/robjwells/rjw-uktides"
-license = "MIT"
+license = "MIT OR Apache-2.0"
 default-run = "tides"
 
 [features]
