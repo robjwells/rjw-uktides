@@ -74,6 +74,15 @@
 //!   and low tides over the next few days;
 //! - [`StationId`], which you need to use to obtain those predictions; and
 //! - [`Station`], which contains more details about a particular tidal station.
+//!
+//!
+//! # Feature flags
+//!
+//! If you only need to use this as a library, you can disable the CLI binary and its
+//! dependencies by [disabling default features][def].
+//!
+//! [def]: https://doc.rust-lang.org/cargo/reference/features.html#the-default-feature
+
 mod error;
 mod parse;
 mod types;

@@ -56,6 +56,13 @@ part of the code shown above.
 tides --station 0256
 ```
 
+### Feature flags
+
+If you only need to use this as a library, you can disable the CLI binary and its
+dependencies by [disabling default features][def].
+
+[def]: https://doc.rust-lang.org/cargo/reference/features.html#the-default-feature
+
 ### What is EasyTide?
 
 [EasyTide] is a public web application that allows you to look up tide
