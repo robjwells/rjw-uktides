@@ -1,6 +1,6 @@
 [package]
 name = "rjw-uktides"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["Rob Wells <rob@robjwells.com>"]
 edition = "2024"
 description = "Rust bindings to the UK Hydrographic Office public EasyTide service."
